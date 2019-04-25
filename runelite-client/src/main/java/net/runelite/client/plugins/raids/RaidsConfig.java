@@ -24,6 +24,7 @@
  */
 package net.runelite.client.plugins.raids;
 
+import java.awt.Color;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
@@ -153,13 +154,111 @@ public interface RaidsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 11,
-		keyName = "layoutMessage",
-		name = "Send raid layout message when entering raid",
-		description = "Sends game message with raid layout on entering new raid"
+			position = 12,
+			keyName = "ptsHr",
+			name = "Enable points per hour message",
+			description = "Enable the message"
+	)
+	default boolean ptsHr()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+			position = 11,
+			keyName = "layoutMessage",
+			name = "Send raid layout message when entering raid",
+			description = "Sends game message with raid layout on entering new raid"
 	)
 	default boolean layoutMessage()
 	{
 		return true;
+	}
+	@ConfigItem(
+			position = 13,
+			keyName = "ptsPanelUpdate",
+			name = "Enable points panel",
+			description = "Enable the panel"
+	)
+	default boolean ptsPanel()
+	{
+		return true;
+	}
+	@ConfigItem(
+			position = 14,
+			keyName = "soloPanel",
+			name = "Solo Points Only",
+			description = "Display Only Solo Points Info"
+	)
+	default boolean soloPanel()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+			position = 15,
+			keyName = "oldOverlay",
+			name = "Old Points Overlay",
+			description = "Use the old points overlay"
+	)
+	default boolean oldOverlay()
+	{
+		return false;
+	}
+
+	//scouting options from old ccclient
+
+	@ConfigItem(
+			position = 16,
+			keyName = "enhanceScouterTitle",
+			name = "Enhance scouter title",
+			description = "Adds #combat and good puzzles to scouter title"
+	)
+	default boolean enhanceScouterTitle()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+			position = 17,
+			keyName = "alwaysShowWorldAndCC",
+			name = "Always show CC and World",
+			description = "The CC and World are not removed from being in the in-game scouter"
+	)
+	default boolean alwaysShowWorldAndCC()
+	{
+		return false;
+	}
+	@ConfigItem(
+			position = 18,
+			keyName = "colorTightrope",
+			name = "Color tightrope",
+			description = "Colors tightrope a separate color"
+	)
+	default boolean colorTightrope()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+			position = 19,
+			keyName = "tightropeColor",
+			name = "Tightrope color",
+			description = "The color of tightropes"
+	)
+	default Color tightropeColor()
+	{
+		return Color.MAGENTA;
+	}
+
+	@ConfigItem(
+			position = 20,
+			keyName = "hideRopeless",
+			name = "Hide no Tightrope raids",
+			description = "Completely hides raids with no tightrope"
+	)
+	default boolean hideRopeless()
+	{
+		return false;
 	}
 }

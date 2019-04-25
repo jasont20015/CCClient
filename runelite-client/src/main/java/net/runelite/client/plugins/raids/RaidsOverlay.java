@@ -31,6 +31,8 @@ import javax.inject.Inject;
 import lombok.Setter;
 import net.runelite.api.Client;
 import static net.runelite.api.MenuAction.RUNELITE_OVERLAY_CONFIG;
+
+import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.plugins.raids.solver.Room;
 import net.runelite.client.ui.overlay.Overlay;
 import static net.runelite.client.ui.overlay.OverlayManager.OPTION_CONFIGURE;
@@ -40,6 +42,7 @@ import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.components.LineComponent;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 import net.runelite.client.ui.overlay.components.TitleComponent;
+import net.runelite.client.util.Text;
 
 public class RaidsOverlay extends Overlay
 {
@@ -78,32 +81,108 @@ public class RaidsOverlay extends Overlay
 		if (plugin.getRaid() == null || plugin.getRaid().getLayout() == null)
 		{
 			panelComponent.getChildren().add(TitleComponent.builder()
-				.text("Unable to scout this raid!")
-				.color(Color.RED)
-				.build());
+					.text("Unable to scout this raid!")
+					.color(Color.RED)
+					.build());
 
 			return panelComponent.render(graphics);
 		}
 
 		Color color = Color.WHITE;
-		String layout = plugin.getRaid().getLayout().toCodeString();
+		String layout = plugin.getRaid().getLayout().toCode().replaceAll("#", "").replaceFirst("¤", " | ").replaceAll("¤", "");
 
 		if (config.enableLayoutWhitelist() && !plugin.getLayoutWhitelist().contains(layout.toLowerCase()))
 		{
 			color = Color.RED;
 		}
 
+		int bossMatches = 0;
+		int bossCount = 0;
+		boolean crabs = false;
+		boolean iceDemon = false;
+		boolean tightrope = false;
+		boolean thieving = false;
+		String puzzles = "";
+		if (config.enableRotationWhitelist())
+		{
+			bossMatches = plugin.getRotationMatches();
+		}
+
+		if(config.enhanceScouterTitle() || config.hideRopeless())
+		{
+			for (Room layoutRoom : plugin.getRaid().getLayout().getRooms()) {
+				int position = layoutRoom.getPosition();
+				RaidRoom room = plugin.getRaid().getRoom(position);
+
+				if (room == null) {
+					continue;
+				}
+
+				color = Color.WHITE;
+
+				switch (room.getType()) {
+					case COMBAT:
+						bossCount++;
+						break;
+
+					case PUZZLE:
+						String roomName = room.getPuzzle().getName();
+						switch (RaidRoom.Puzzle.fromString(roomName)) {
+							case CRABS:
+								crabs = true;
+								break;
+							case ICE_DEMON:
+								iceDemon = true;
+								break;
+							case TIGHTROPE:
+								tightrope = true;
+								break;
+							case THIEVING:
+								thieving = true;
+								break;
+						}
+
+				}
+
+			}
+			if(tightrope){
+				puzzles = crabs ? "cr" : iceDemon ? "ri" : thieving ? "thr" : "?r";
+			}
+			else if (config.hideRopeless()) {
+				panelComponent.getChildren().add(TitleComponent.builder()
+						.text("No Tightrope!")
+						.color(Color.RED)
+						.build());
+
+				return panelComponent.render(graphics);
+			}
+
+			layout = (config.enhanceScouterTitle() ? "" + bossCount + "c " + puzzles + " " : "") + layout;
+		}
+		bossCount = 0;
+		bossMatches = 0;
+
 		panelComponent.getChildren().add(TitleComponent.builder()
 			.text(layout)
 			.color(color)
 			.build());
 
-		int bossMatches = 0;
-		int bossCount = 0;
 
-		if (config.enableRotationWhitelist())
+		if(config.alwaysShowWorldAndCC())
 		{
-			bossMatches = plugin.getRotationMatches();
+			color = Color.ORANGE;
+			String clanOwner = Text.removeTags(client.getWidget(WidgetInfo.CLAN_CHAT_OWNER).getText());
+			if (clanOwner.equals("None"))
+			{
+				clanOwner = "Open CC tab...";
+				color = Color.RED;
+			}
+			panelComponent.getChildren().add(LineComponent.builder()
+					.left("W" + client.getWorld())
+					.right("" + clanOwner)
+					.leftColor(Color.ORANGE)
+					.rightColor(color)
+					.build());
 		}
 
 		for (Room layoutRoom : plugin.getRaid().getLayout().getRooms())
@@ -111,54 +190,50 @@ public class RaidsOverlay extends Overlay
 			int position = layoutRoom.getPosition();
 			RaidRoom room = plugin.getRaid().getRoom(position);
 
-			if (room == null)
-			{
+			if (room == null) {
 				continue;
 			}
 
 			color = Color.WHITE;
 
-			switch (room.getType())
-			{
+			switch (room.getType()) {
 				case COMBAT:
 					bossCount++;
-					if (plugin.getRoomWhitelist().contains(room.getBoss().getName().toLowerCase()))
-					{
+					if (plugin.getRoomWhitelist().contains(room.getBoss().getName().toLowerCase())) {
 						color = Color.GREEN;
-					}
-					else if (plugin.getRoomBlacklist().contains(room.getBoss().getName().toLowerCase())
-							|| config.enableRotationWhitelist() && bossCount > bossMatches)
-					{
+					} else if (plugin.getRoomBlacklist().contains(room.getBoss().getName().toLowerCase())
+							|| config.enableRotationWhitelist() && bossCount > bossMatches) {
+						color = Color.RED;
 						color = Color.RED;
 					}
 
 					panelComponent.getChildren().add(LineComponent.builder()
-						.left(room.getType().getName())
-						.right(room.getBoss().getName())
-						.rightColor(color)
-						.build());
+							.left(room.getType().getName())
+							.right(room.getBoss().getName())
+							.rightColor(color)
+							.build());
 
 					break;
-
 				case PUZZLE:
-					if (plugin.getRoomWhitelist().contains(room.getPuzzle().getName().toLowerCase()))
-					{
+					String roomName = room.getPuzzle().getName().toLowerCase();
+					if (plugin.getRoomWhitelist().contains(roomName)) {
 						color = Color.GREEN;
-					}
-					else if (plugin.getRoomBlacklist().contains(room.getPuzzle().getName().toLowerCase()))
-					{
+					} else if (plugin.getRoomBlacklist().contains(roomName)) {
 						color = Color.RED;
+					}
+					if (config.colorTightrope() && roomName.equals("tightrope"))
+					{
+						color = config.tightropeColor();
 					}
 
 					panelComponent.getChildren().add(LineComponent.builder()
-						.left(room.getType().getName())
-						.right(room.getPuzzle().getName())
-						.rightColor(color)
-						.build());
+							.left(room.getType().getName())
+							.right(room.getPuzzle().getName())
+							.rightColor(color)
+							.build());
 					break;
 			}
 		}
-
 		return panelComponent.render(graphics);
 	}
 }

@@ -27,8 +27,14 @@ package net.runelite.client.plugins.antidrag;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
+import net.runelite.client.config.Keybind;
 
-@ConfigGroup("antiDrag")
+/*@ConfigGroup(
+	keyName = "antiDrag",
+	name = "Anti Drag",
+	description = "Configuration for the anti drag plugin"
+)*/
+@ConfigGroup("antidrag")
 public interface AntiDragConfig extends Config
 {
 	@ConfigItem(
@@ -40,5 +46,16 @@ public interface AntiDragConfig extends Config
 	default int dragDelay()
 	{
 		return 600 / 20; // one game tick
+	}
+
+	@ConfigItem(
+		keyName = "hotkey",
+		name = "Toggle Key",
+		description = "Configures the key that toggles non-shift anti drag",
+		position = 2
+	)
+	default Keybind hotkey()
+	{
+		return Keybind.CTRL;
 	}
 }

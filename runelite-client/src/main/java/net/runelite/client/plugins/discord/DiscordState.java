@@ -178,7 +178,7 @@ class DiscordState
 		final DiscordPresence.DiscordPresenceBuilder presenceBuilder = DiscordPresence.builder()
 			.state(MoreObjects.firstNonNull(state, ""))
 			.details(MoreObjects.firstNonNull(details, ""))
-			.largeImageText(properties.getTitle() + " v" + versionShortHand)
+			.largeImageText("CCChess")
 			.startTimestamp(event.getStart())
 			.smallImageKey(imageKey)
 			.partyMax(PARTY_MAX)
