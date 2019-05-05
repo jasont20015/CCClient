@@ -99,9 +99,9 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 @PluginDescriptor(
-	name = "Screenshot",
-	description = "Enable the manual and automatic taking of screenshots",
-	tags = {"external", "images", "imgur", "integration", "notifications"}
+		name = "Screenshot",
+		description = "Enable the manual and automatic taking of screenshots",
+		tags = {"external", "images", "imgur", "integration", "notifications"}
 )
 @Slf4j
 public class ScreenshotPlugin extends Plugin
@@ -119,8 +119,8 @@ public class ScreenshotPlugin extends Plugin
 	private static final Pattern UNTRADEABLE_DROP_PATTERN = Pattern.compile(".*Untradeable drop: ([^<>]+)(?:</col>)?");
 	private static final Pattern DUEL_END_PATTERN = Pattern.compile("You have now (won|lost) ([0-9]+) duels?\\.");
 	private static final ImmutableList<String> PET_MESSAGES = ImmutableList.of("You have a funny feeling like you're being followed",
-		"You feel something weird sneaking into your backpack",
-		"You have a funny feeling like you would have been followed");
+			"You feel something weird sneaking into your backpack",
+			"You have a funny feeling like you would have been followed");
 
 	static String format(Date date)
 	{
@@ -179,7 +179,7 @@ public class ScreenshotPlugin extends Plugin
 	@Getter(AccessLevel.PACKAGE)
 	private BufferedImage reportButton;
 
-    private List<Player> dying = new ArrayList<Player>();
+	private List<Player> dying = new ArrayList<Player>();
 
 	private NavigationButton titleBarButton;
 
@@ -208,25 +208,25 @@ public class ScreenshotPlugin extends Plugin
 		final BufferedImage iconImage = ImageUtil.getResourceStreamFromClass(getClass(), "screenshot.png");
 
 		titleBarButton = NavigationButton.builder()
-			.tab(false)
-			.tooltip("Take screenshot")
-			.icon(iconImage)
-			.onClick(() -> takeScreenshot(format(new Date())))
-			.popup(ImmutableMap
-				.<String, Runnable>builder()
-				.put("Open screenshot folder...", () ->
-				{
-					try
-					{
-						Desktop.getDesktop().open(SCREENSHOT_DIR);
-					}
-					catch (IOException ex)
-					{
-						log.warn("Error opening screenshot dir", ex);
-					}
-				})
-				.build())
-			.build();
+				.tab(false)
+				.tooltip("Take screenshot")
+				.icon(iconImage)
+				.onClick(() -> takeScreenshot(format(new Date())))
+				.popup(ImmutableMap
+						.<String, Runnable>builder()
+						.put("Open screenshot folder...", () ->
+						{
+							try
+							{
+								Desktop.getDesktop().open(SCREENSHOT_DIR);
+							}
+							catch (IOException ex)
+							{
+								log.warn("Error opening screenshot dir", ex);
+							}
+						})
+						.build())
+				.build();
 
 		clientToolbar.addNavigation(titleBarButton);
 	}
@@ -243,7 +243,7 @@ public class ScreenshotPlugin extends Plugin
 	public void onGameStateChanged(GameStateChanged event)
 	{
 		if (event.getGameState() == GameState.LOGGED_IN
-			&& reportButton == null)
+				&& reportButton == null)
 		{
 			reportButton = spriteManager.getSprite(SpriteID.CHATBOX_REPORT_BUTTON, 0);
 		}
@@ -252,22 +252,21 @@ public class ScreenshotPlugin extends Plugin
 	@Subscribe
 	public void onGameTick(GameTick event)
 	{
-        if(config.screenshotFriendDeath()) {
-            for (Player p : dying) {
-                Actor rsp = p;
-                //double checking animation in case I did a fucky wucky
-                //in case the action frame is wrong the checking if higher than or equal to
-                //not sure where exactly player lay down, from the limited testing I've done (me lazy) it's frame 8/9ish
-                if (rsp.getActionFrame() >= 8 && rsp.getAnimation() == 836) {
-                    takeScreenshot(p.getName() + "ded " + format(new Date()));
-                    dying.remove(p);
-                }
-                //if they get out of range or something, they'll still get removed
+		if(config.screenshotFriendDeath()) {
+			for (Player p : dying) {
+				//double checking animation in case I did a fucky wucky
+				//in case the action frame is wrong the checking if higher than or equal to
+				//not sure where exactly player lay down, from the limited testing I've done (me lazy) it's frame 8/9ish
+				if (p.getActionFrame() >= 8 && p.getAnimation() == 836) {
+					takeScreenshot(p.getName() + "ded " + format(new Date()));
+					dying.remove(p);
+				}
+				//if they get out of range or something, they'll still get removed
 
-                if (rsp.getAnimation() != 836)
-                    dying.remove(rsp);
-            }
-        }
+				if (p.getAnimation() != 836)
+					dying.remove(p);
+			}
+		}
 		if (!shouldTakeScreenshot)
 		{
 			return;
@@ -297,33 +296,37 @@ public class ScreenshotPlugin extends Plugin
 		}
 	}
 
-    @Subscribe
-    public void onAnimationChanged(AnimationChanged e) {
-        if(!config.screenshotFriendDeath())
-            return;
-
-        if (!(e.getActor() instanceof Player))
-            return;
-        Player p = (Player) e.getActor();
-
-        if(p.getName().equals(client.getLocalPlayer().getName()))
-            return;
-        if(p.getAnimation() != 836) {
-            return;
-        }
-        int tob = client.getVar(Varbits.THEATRE_OF_BLOOD);
-
-        if(client.getVar(Varbits.IN_RAID) == 1 || tob == 2 || tob == 3 || p.isFriend()) {
-            //this is the same as the tick counter had, just want to make ss at right timing
-            dying.add(p);
-        }
-    }
 	@Subscribe
-	public void onLocalPlayerDeath(LocalPlayerDeath death)
-	{
-		if (config.screenshotPlayerDeath())
+	public void onAnimationChanged(AnimationChanged e) {
+		if(!config.screenshotFriendDeath())
+			return;
+
+		if (!(e.getActor() instanceof Player))
+			return;
+		Player p = (Player) e.getActor();
+
+
+		if(p.getAnimation() != 836)
 		{
-			takeScreenshot("Death " + format(new Date()));
+			return;
+		}
+		if(p.getName().equals(client.getLocalPlayer().getName()))
+		{
+			if (config.screenshotPlayerDeath())
+			{
+				dying.add(p);
+			}
+			else
+			{
+				return;
+			}
+		}
+
+		int tob = client.getVar(Varbits.THEATRE_OF_BLOOD);
+
+		if(client.getVar(Varbits.IN_RAID) == 1 || tob == 2 || tob == 3 || p.isFriend()) {
+			//this is the same as the tick counter had, just want to make ss at right timing
+			dying.add(p);
 		}
 	}
 
@@ -623,8 +626,8 @@ public class ScreenshotPlugin extends Plugin
 	private void takeScreenshot(String fileName, Image image)
 	{
 		BufferedImage screenshot = config.includeFrame()
-			? new BufferedImage(clientUi.getWidth(), clientUi.getHeight(), BufferedImage.TYPE_INT_ARGB)
-			: new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+				? new BufferedImage(clientUi.getWidth(), clientUi.getHeight(), BufferedImage.TYPE_INT_ARGB)
+				: new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 
 		Graphics graphics = screenshot.getGraphics();
 
@@ -708,10 +711,10 @@ public class ScreenshotPlugin extends Plugin
 		String json = RuneLiteAPI.GSON.toJson(new ImageUploadRequest(screenshotFile));
 
 		Request request = new Request.Builder()
-			.url(IMGUR_IMAGE_UPLOAD_URL)
-			.addHeader("Authorization", "Client-ID " + IMGUR_CLIENT_ID)
-			.post(RequestBody.create(JSON, json))
-			.build();
+				.url(IMGUR_IMAGE_UPLOAD_URL)
+				.addHeader("Authorization", "Client-ID " + IMGUR_CLIENT_ID)
+				.post(RequestBody.create(JSON, json))
+				.build();
 
 		RuneLiteAPI.CLIENT.newCall(request).enqueue(new Callback()
 		{
