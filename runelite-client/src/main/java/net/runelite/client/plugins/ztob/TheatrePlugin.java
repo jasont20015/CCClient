@@ -168,7 +168,6 @@ public class TheatrePlugin extends Plugin {
     private boolean runXarpus;
 
     private int Xarpus_previousAnimation;
-    private int partySize;
 
     @Getter(AccessLevel.PACKAGE)
     private boolean Xarpus_Stare;
@@ -366,7 +365,6 @@ public class TheatrePlugin extends Plugin {
             case NpcID.THE_MAIDEN_OF_SUGADINTI_8364:
             case NpcID.THE_MAIDEN_OF_SUGADINTI_8365:
                 runMaiden = true;
-                partySize = client.getPlayers().size();
                 break;
             case NpcID.BLOOD_SPAWN:
                 Maiden_Spawns.add(npc);
