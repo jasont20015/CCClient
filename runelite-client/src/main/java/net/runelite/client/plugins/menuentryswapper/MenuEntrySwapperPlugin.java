@@ -519,14 +519,6 @@ public class MenuEntrySwapperPlugin extends Plugin
 		{
 			swap("quick-start", option, target, true);
 		}
-		else if (config.construction() && target.equals("door") && (option.equals("open") || option.equals("examine")))
-		{
-			remove(target, "pick-lock", "force", "open", "examine", "walk here");
-		}
-		else if (config.construction() && target.equals("door space") && option.equals("examine"))
-		{
-			remove(target, "walk here", "examine");
-		}
 		else if (config.swapQuick() && option.equals("pass"))
 		{
 			swap("quick-pass", option, target, true);

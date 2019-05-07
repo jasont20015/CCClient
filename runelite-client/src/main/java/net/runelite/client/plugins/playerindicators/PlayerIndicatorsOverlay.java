@@ -94,7 +94,7 @@ public class PlayerIndicatorsOverlay extends Overlay
 		{
 			if (!playerInfo.isEmpty())
 			{
-				playerInfo = playerInfo.concat("(" + combatLevel + ")");
+				playerInfo = playerInfo.concat(" (" + combatLevel + ")");
 			}
 			else
 			{

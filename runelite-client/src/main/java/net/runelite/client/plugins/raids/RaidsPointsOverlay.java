@@ -26,16 +26,11 @@ package net.runelite.client.plugins.raids;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.text.NumberFormat;
-import java.util.Locale;
 import javax.inject.Inject;
 import net.runelite.api.Client;
-import static net.runelite.api.MenuAction.RUNELITE_OVERLAY_CONFIG;
 import net.runelite.api.Varbits;
 import static net.runelite.client.plugins.raids.RaidsPlugin.POINTS_FORMAT;
 import net.runelite.client.ui.overlay.Overlay;
-import static net.runelite.client.ui.overlay.OverlayManager.OPTION_CONFIGURE;
-import net.runelite.client.ui.overlay.OverlayMenuEntry;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.components.LineComponent;
@@ -51,20 +46,11 @@ public class RaidsPointsOverlay extends Overlay
 
 	private final PanelComponent panel = new PanelComponent();
 
-	private static final NumberFormat UNIQUE_FORMAT = NumberFormat.getPercentInstance(Locale.ENGLISH);
-	static
-	{
-		UNIQUE_FORMAT.setMaximumFractionDigits(2);
-		UNIQUE_FORMAT.setMinimumFractionDigits(2);
-	}
-
 	@Inject
-	private RaidsPointsOverlay(RaidsPlugin plugin)
+	public RaidsPointsOverlay()
 	{
-		super(plugin);
 		setPosition(OverlayPosition.TOP_RIGHT);
 		setPriority(OverlayPriority.HIGH);
-		getMenuEntries().add(new OverlayMenuEntry(RUNELITE_OVERLAY_CONFIG, OPTION_CONFIGURE, "Raids overlay"));
 	}
 
 	@Override
@@ -78,43 +64,25 @@ public class RaidsPointsOverlay extends Overlay
 		int totalPoints = client.getVar(Varbits.TOTAL_POINTS);
 		int personalPoints = client.getVar(Varbits.PERSONAL_POINTS);
 		int partySize = client.getVar(Varbits.RAID_PARTY_SIZE);
-		double uniqueChance = totalPoints / 867500f;
 
 		panel.getChildren().clear();
 		panel.getChildren().add(LineComponent.builder()
-				.left("Total:")
-				.right(POINTS_FORMAT.format(totalPoints))
-				.build());
+			.left("Total:")
+			.right(POINTS_FORMAT.format(totalPoints))
+			.build());
 
 		panel.getChildren().add(LineComponent.builder()
-				.left(client.getLocalPlayer().getName() + ":")
-				.right(POINTS_FORMAT.format(personalPoints))
-				.build());
-
+			.left(client.getLocalPlayer().getName() + ":")
+			.right(POINTS_FORMAT.format(personalPoints))
+			.build());
 
 		if (partySize > 1)
 		{
 			panel.getChildren().add(LineComponent.builder()
-					.left("Party size:")
-					.right(String.valueOf(partySize))
-					.build());
-		}
-
-		panel.getChildren().add(LineComponent.builder()
-				.left("Unique:")
-				.right(UNIQUE_FORMAT.format(uniqueChance))
+				.left("Party size:")
+				.right(String.valueOf(partySize))
 				.build());
-		//TODO this is annoyingly bugged, personalpoints returns null for some reason
-/*
-		if (partySize > 1)
-		{
-				double personalChance = uniqueChance * (double)(personalPoints / totalPoints);
-
-				panel.getChildren().add(LineComponent.builder()
-					.left("Personal:")
-					.right(UNIQUE_FORMAT.format(personalChance))
-					.build());
-		}*/
+		}
 
 		return panel.render(graphics);
 	}

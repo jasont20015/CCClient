@@ -283,16 +283,6 @@ public interface MenuEntrySwapperConfig extends Config
 	}
 
 	@ConfigItem(
-			keyName = "construction",
-			name = "Build/Remove (Will break normal doors)",
-			description = "Will swap stuff for construction"
-	)
-	default boolean construction()
-	{
-		return false;
-	}
-
-	@ConfigItem(
 		keyName = "swapPick",
 		name = "Pick",
 		description = "Swap Pick with Pick-lots of the Gourd tree in the Chambers of Xeric"

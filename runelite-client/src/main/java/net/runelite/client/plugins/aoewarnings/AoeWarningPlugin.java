@@ -2,6 +2,8 @@
  * Copyright (c) 2018, Adam <Adam@sigterm.info>
  * All rights reserved.
  *
+ * Modified by farhan1666
+ * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *

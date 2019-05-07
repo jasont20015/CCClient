@@ -87,7 +87,7 @@ public class TheatreOverlay extends Overlay {
 						for (WorldPoint point : plugin.getTemp())
 						{
 
-							drawTile(graphics, point, Color.black, 4, 255, 0);
+							drawTile(graphics, point, Color.white, 4, 255, 0);
 
 						}
 
@@ -100,7 +100,7 @@ public class TheatreOverlay extends Overlay {
 						for (WorldPoint point : plugin.getTemp2())
 						{
 
-							drawTile(graphics, point, Color.black, 4, 255, 0);
+							drawTile(graphics, point, Color.white, 4, 255, 0);
 
 
 						}

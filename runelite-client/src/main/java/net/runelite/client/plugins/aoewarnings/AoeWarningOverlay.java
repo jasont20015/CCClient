@@ -2,6 +2,9 @@
  * Copyright (c) 2017, Adam <Adam@sigterm.info>
  * All rights reserved.
  *
+ *
+ * Modified by farhan1666
+ * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
@@ -133,11 +136,11 @@ public class AoeWarningOverlay extends Overlay
 
 			if (config.isOutlineEnabled())
 			{
-				graphics.setColor(new Color(0, 150, 200, outlineAlpha));
+				graphics.setColor(new Color(255, 0, 0, outlineAlpha));
 				graphics.drawPolygon(tilePoly);
 			}
 
-			graphics.setColor(new Color(0, 150, 200, fillAlpha));
+			graphics.setColor(new Color(255, 0, 0, fillAlpha));
 			graphics.fillPolygon(tilePoly);
 		}
 		return null;

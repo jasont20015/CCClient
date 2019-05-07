@@ -168,6 +168,7 @@ public class TheatrePlugin extends Plugin {
     private boolean runXarpus;
 
     private int Xarpus_previousAnimation;
+    private int partySize;
 
     @Getter(AccessLevel.PACKAGE)
     private boolean Xarpus_Stare;
@@ -216,6 +217,7 @@ public class TheatrePlugin extends Plugin {
     private int redCrabsTimer;
 
     private int P3_attacksLeft;
+    private boolean xarpusFlag;
 
     @Inject
     private Client client;
@@ -364,6 +366,7 @@ public class TheatrePlugin extends Plugin {
             case NpcID.THE_MAIDEN_OF_SUGADINTI_8364:
             case NpcID.THE_MAIDEN_OF_SUGADINTI_8365:
                 runMaiden = true;
+                partySize = client.getPlayers().size();
                 break;
             case NpcID.BLOOD_SPAWN:
                 Maiden_Spawns.add(npc);
@@ -412,7 +415,7 @@ public class TheatrePlugin extends Plugin {
             case NpcID.XARPUS_8340:
             case NpcID.XARPUS_8341:
                 runXarpus = true;
-                exhumecount = 25;
+                xarpusFlag = false;
                 Xarpus_NPC = npc;
                 Xarpus_Stare = false;
                 Xarpus_TicksUntilShoot = 9;
@@ -593,6 +596,25 @@ public class TheatrePlugin extends Plugin {
                 if (!bloatFlag) {
                     bloatTimer = 0;
                     bloatFlag = true;
+                }
+            }
+        }
+        if(isRunXarpus()){
+            if(client.getVar(Varbits.MULTICOMBAT_AREA ) == 1) {
+                if (!xarpusFlag) {
+                    int players = client.getPlayers().size();
+                    if (players == 5) {
+                        exhumecount = 18;
+                    } else if (players == 4) {
+                        exhumecount = 15;
+                    } else if (players == 3) {
+                        exhumecount = 12;
+                    } else if (players == 2) {
+                        exhumecount = 9;
+                    } else {
+                        exhumecount = 7;
+                    }
+                    xarpusFlag = true;
                 }
             }
         }

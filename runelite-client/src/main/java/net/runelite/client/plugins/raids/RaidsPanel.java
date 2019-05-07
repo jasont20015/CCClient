@@ -24,15 +24,15 @@
  */
 package net.runelite.client.plugins.raids;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.lang.reflect.Method;
+import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.BorderFactory;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.client.callback.ClientThread;
@@ -41,84 +41,80 @@ import net.runelite.client.ui.PluginPanel;
 
 public class RaidsPanel extends PluginPanel
 {
-	@Inject
-	private Client client;
-	@Inject
-	private RaidsPlugin raidsPlugin;
+    @Inject
+    private Client client;
+    @Inject
+    private RaidsPlugin raidsPlugin;
 
-	@Inject
-	private ClientThread clientThread;
-	private JButton reloadButton = new JButton("Reload Instance");
-	private JButton reloadScouter = new JButton("Reload Raid Overlay");
-	private JLabel reloadMessage = new JLabel("<html><center><h3>Instance Reload Helper </h3>Reloading an instance will cause your client to disconnect temporarily.<br></center></html>");
+    @Inject
+    private ClientThread clientThread;
+    private JButton reloadButton = new JButton("Reload Instance");
+    private JButton reloadScouter = new JButton("Reload Raid Overlay");
+    private JLabel reloadMessage = new JLabel("<html><center><h3>Instance Reload Helper </h3>Reloading an instance will cause your client to disconnect temporarily.<br></center></html>");
+    void init(RaidsConfig config)
+    {
 
-	void init(RaidsConfig config)
-	{
+        // this may or may not qualify as a hack
+        // but this lets the editor pane expand to fill the whole parent panel
+        getParent().setLayout(new FlowLayout());
+        getParent().add(this, BorderLayout.CENTER);
 
-		// this may or may not qualify as a hack
-		// but this lets the editor pane expand to fill the whole parent panel
-		getParent().setLayout(new FlowLayout());
-		getParent().add(this, BorderLayout.CENTER);
+        setLayout(new BorderLayout());
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        setBackground(ColorScheme.DARK_GRAY_COLOR);
 
-		setLayout(new BorderLayout());
-		setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		setBackground(ColorScheme.DARK_GRAY_COLOR);
+        JPanel reloadContainer = new JPanel();
+        JPanel scouterContainer = new JPanel();
+        JPanel buttons = new JPanel();
+        reloadContainer.setLayout(new BorderLayout());
+        buttons.setLayout(new BorderLayout());
+        buttons.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+        reloadContainer.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+        scouterContainer.setLayout(new BorderLayout());
+        scouterContainer.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 
-		JPanel reloadContainer = new JPanel();
-		JPanel scouterContainer = new JPanel();
-		JPanel buttons = new JPanel();
-		reloadContainer.setLayout(new BorderLayout());
-		buttons.setLayout(new BorderLayout());
-		buttons.setBackground(ColorScheme.DARKER_GRAY_COLOR);
-		reloadContainer.setBackground(ColorScheme.DARKER_GRAY_COLOR);
-		scouterContainer.setLayout(new BorderLayout());
-		scouterContainer.setBackground(ColorScheme.DARKER_GRAY_COLOR);
-
-		JPanel reloadFrame = new JPanel();
-		JPanel scoutFrame = new JPanel();
-		reloadButton.addActionListener((ActionEvent e) ->
-		{
+        JPanel reloadFrame = new JPanel();
+        JPanel scoutFrame = new JPanel();
+        reloadButton.addActionListener((ActionEvent e) ->
+        {
 
 
-			if ((client.getGameState() == GameState.LOGGED_IN))
-			{
+            if ((client.getGameState() == GameState.LOGGED_IN))
+            {
 
-				try
-				{
-					//look for client.gameStateChanged(-1); in src files to find
-					Method m = client.getClass().getClassLoader().loadClass("jr").getDeclaredMethod("fn", int.class, int.class);
-					m.setAccessible(true);
-					m.invoke(null, 40, -1893789506);
+                try
+                {
+                    Method m = client.getClass().getClassLoader().loadClass("jr").getDeclaredMethod("fn", int.class, int.class);
+                    m.setAccessible(true);
+                    m.invoke(null, 40, -1893789506);
+                    raidsPlugin.canShow = false;
+                    raidsPlugin.timerOverride = true;
+                    //TODO: Since this is mainly for raids i'd like to reload the raids scouting plugin after the dc is finished
 
-					//Method m = client.getClass().getClassLoader().loadClass("jr").getDeclaredMethod("fn", int.class, int.class);
-					//m.setAccessible(true);
-					//m.invoke(null, 40, -1893789506);
-					//TODO: Since this is mainly for raids i'd like to reload the raids scouting plugin after the dc is finished
+                }
+                catch (ReflectiveOperationException f)
+                {
+                    throw new RuntimeException(f);
+                }
+            }
+            else
+            {
+                //TODO: User is still in a dc, or not logged in. Possibly provide a meaningful message somewhere.
+            }
+        });
+        reloadScouter.addActionListener((ActionEvent e) ->
+        {
+            if ((client.getGameState() == GameState.LOGGED_IN)) {
+                raidsPlugin.canShow = false;
+                raidsPlugin.checkRaidPresence(true);
+            }
+        });
 
-				}
-				catch (ReflectiveOperationException f)
-				{
-					throw new RuntimeException(f);
-				}
-			}
-			else
-			{
-				//TODO: User is still in a dc, or not logged in. Possibly provide a meaningful message somewhere.
-			}
-		});
-		reloadScouter.addActionListener((ActionEvent e) ->
-		{
-			if ((client.getGameState() == GameState.LOGGED_IN))
-			{
-				raidsPlugin.checkRaidPresence(true);
-			}
-		});
-
-		reloadFrame.add(reloadButton);
-		scoutFrame.add(reloadScouter);
-		reloadContainer.add(reloadFrame, BorderLayout.NORTH);
-		reloadContainer.add(scoutFrame, BorderLayout.SOUTH);
-		add(reloadMessage, BorderLayout.PAGE_START);
-		add(reloadContainer, BorderLayout.CENTER);
-	}
+        reloadFrame.add(reloadButton);
+        scoutFrame.add(reloadScouter);
+        reloadContainer.add(reloadFrame, BorderLayout.NORTH);
+        reloadContainer.add(scoutFrame, BorderLayout.SOUTH);
+        add(reloadMessage, BorderLayout.PAGE_START);
+        add(reloadContainer, BorderLayout.CENTER);
+    }
 }

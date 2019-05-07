@@ -25,12 +25,9 @@
 package net.runelite.client.plugins.raids;
 
 import java.awt.Color;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
-import net.runelite.client.config.Keybind;
 
 @ConfigGroup("raids")
 public interface RaidsConfig extends Config
@@ -38,8 +35,8 @@ public interface RaidsConfig extends Config
 	@ConfigItem(
 		position = 0,
 		keyName = "raidsTimer",
-		name = "Level time tooltip",
-		description = "Displays your level times as a tooltip on the points overlay"
+		name = "Display elapsed raid time",
+		description = "Display elapsed raid time"
 	)
 	default boolean raidsTimer()
 	{
@@ -157,21 +154,65 @@ public interface RaidsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 11,
-		keyName = "showScavsFarms",
-		name = "Show scavengers and farming",
-		description = "Adds scavengers and farming to the room breakdown"
+			position = 12,
+			keyName = "ptsHr",
+			name = "Enable points per hour message",
+			description = "Enable the message"
 	)
-	default boolean showScavsFarms()
+	default boolean ptsHr()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+			position = 11,
+			keyName = "layoutMessage",
+			name = "Send raid layout message when entering raid",
+			description = "Sends game message with raid layout on entering new raid"
+	)
+	default boolean layoutMessage()
+	{
+		return true;
+	}
+	@ConfigItem(
+			position = 13,
+			keyName = "ptsPanelUpdate",
+			name = "Enable points panel",
+			description = "Enable the panel"
+	)
+	default boolean ptsPanel()
+	{
+		return true;
+	}
+	@ConfigItem(
+			position = 14,
+			keyName = "soloPanel",
+			name = "Solo Points Only",
+			description = "Display Only Solo Points Info"
+	)
+	default boolean soloPanel()
 	{
 		return false;
 	}
 
 	@ConfigItem(
-		position = 12,
-		keyName = "enhanceScouterTitle",
-		name = "Enhance scouter title",
-		description = "Adds #combat and good puzzles to scouter title"
+			position = 15,
+			keyName = "oldOverlay",
+			name = "Old Points Overlay",
+			description = "Use the old points overlay"
+	)
+	default boolean oldOverlay()
+	{
+		return false;
+	}
+
+	//scouting options from old ccclient
+
+	@ConfigItem(
+			position = 16,
+			keyName = "enhanceScouterTitle",
+			name = "Enhance scouter title",
+			description = "Adds #combat and good puzzles to scouter title"
 	)
 	default boolean enhanceScouterTitle()
 	{
@@ -179,86 +220,20 @@ public interface RaidsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 1,
-		keyName = "ptsHr",
-		name = "Enable points per hour message",
-		description = "Enable the message"
-	)
-	default boolean ptsHr()
-	{
-		return true;
-	}
-	@ConfigItem(
-		position = 16,
-		keyName = "showRecommendedItems",
-		name = "Show recommended items",
-		description = "Adds overlay with recommended items to scouter"
-	)
-	default boolean showRecommendedItems()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-		position = 17,
-		keyName = "recommendedItems",
-		name = "Recommended items",
-		description = "User-set recommended items in the form: [muttadiles,ice barrage,zamorak godsword],[tekton,elder maul], ..."
-	)
-	default String recommendedItems()
-	{
-		return "";
-	}
-
-	@ConfigItem(
-		position = 18,
-		keyName = "scavsBeforeIce",
-		name = "Show last scavs for Ice Demon",
-		description = "Highlights final scavengers before Ice Demon"
-	)
-	default boolean scavsBeforeIce()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-		position = 19,
-		keyName = "scavsBeforeOlm",
-		name = "Show last scavs for Olm",
-		description = "Highlights final scavengers before Olm"
-	)
-	default boolean scavsBeforeOlm()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-		position = 20,
-		keyName = "scavPrepColor",
-		name = "Last scavs color",
-		description = "The color of the final scavs before Ice Demon/Olm"
-	)
-	default Color scavPrepColor()
-	{
-		return new Color(130, 222, 255); //light blue
-	}
-
-	@ConfigItem(
-		position = 21,
-		keyName = "alwaysShowWorldAndCC",
-		name = "Always show CC and World",
-		description = "The CC and World are not removed from being in the in-game scouter"
+			position = 17,
+			keyName = "alwaysShowWorldAndCC",
+			name = "Always show CC and World",
+			description = "The CC and World are not removed from being in the in-game scouter"
 	)
 	default boolean alwaysShowWorldAndCC()
 	{
 		return false;
 	}
-
 	@ConfigItem(
-		position = 22,
-		keyName = "colorTightrope",
-		name = "Color tightrope",
-		description = "Colors tightrope a separate color"
+			position = 18,
+			keyName = "colorTightrope",
+			name = "Color tightrope",
+			description = "Colors tightrope a separate color"
 	)
 	default boolean colorTightrope()
 	{
@@ -266,10 +241,10 @@ public interface RaidsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 23,
-		keyName = "tightropeColor",
-		name = "Tightrope color",
-		description = "The color of tightropes"
+			position = 19,
+			keyName = "tightropeColor",
+			name = "Tightrope color",
+			description = "The color of tightropes"
 	)
 	default Color tightropeColor()
 	{
@@ -277,34 +252,12 @@ public interface RaidsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 24,
-		keyName = "hideRopeless",
-		name = "Hide no Tightrope raids",
-		description = "Completely hides raids with no tightrope"
+			position = 20,
+			keyName = "hideRopeless",
+			name = "Hide no Tightrope raids",
+			description = "Completely hides raids with no tightrope"
 	)
 	default boolean hideRopeless()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-		position = 25,
-		keyName = "layoutMessage",
-		name = "Send raid layout message when entering raid",
-		description = "Sends game message with raid layout on entering new raid"
-	)
-	default boolean layoutMessage()
-	{
-		return true;
-	}
-
-	@ConfigItem(
-			position = 26,
-			keyName = "displayFloorBreak",
-			name = "Layout floor break",
-			description = "Displays floor break in layout"
-	)
-	default boolean displayFloorBreak()
 	{
 		return false;
 	}
