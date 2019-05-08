@@ -263,16 +263,6 @@ public interface MenuEntrySwapperConfig extends Config
 	}
 
 	@ConfigItem(
-		keyName = "walkHere",
-		name = "Walk Here",
-		description = "Will only display Walk here when shift is held."
-	)
-	default boolean walkHere() 
-	{
-		return true;
-	}
-
-	@ConfigItem(
 		keyName = "zmirunning",
 		name = "Offer all Pure essence",
 		description = "Will swap stuff for ZMI running"

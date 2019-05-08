@@ -528,10 +528,6 @@ public class MenuEntrySwapperPlugin extends Plugin
 		{
 			swap("quick-open", option, target, true);
 		}
-		else if (config.walkHere() && shiftModifier && option.contains("attack"))
-		{
-			removeAllBut("Walk Here", "");
-		}
 		else if (config.swapAdmire() && option.equals("admire"))
 		{
 			swap("teleport", option, target, true);
