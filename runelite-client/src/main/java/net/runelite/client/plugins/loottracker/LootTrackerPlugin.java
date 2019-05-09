@@ -121,6 +121,9 @@ public class LootTrackerPlugin extends Plugin
 
 	@Inject
 	private ItemManager itemManager;
+	
+	@Inject
+	private ChatMessageManager chatMessageManager;
 
 	@Inject
 	private ChatMessageManager chatMessageManager;

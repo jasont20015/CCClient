@@ -4,7 +4,11 @@
  *
  *
  * Modified by farhan1666
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> ea80c686fd7f2bb54a8ab1411b95a962cce18a20
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
@@ -27,9 +31,15 @@
  */
 package net.runelite.client.plugins.aoewarnings;
 
+<<<<<<< HEAD
 import java.time.Duration;
+=======
+>>>>>>> ea80c686fd7f2bb54a8ab1411b95a962cce18a20
 import java.util.HashMap;
 import java.util.Map;
+import net.runelite.api.ProjectileID;
+
+
 
 import net.runelite.api.ProjectileID;
 
@@ -107,6 +117,7 @@ public enum AoeProjectileInfo
 	/**
 	 * Aoe of Addy Drags
 	 */
+<<<<<<< HEAD
     ADDY_DRAG_POISON(ProjectileID.ADDY_DRAG_POISON, 1),
 
     /**
@@ -114,6 +125,19 @@ public enum AoeProjectileInfo
      */
 
     DRAKE_BREATH(ProjectileID.DRAKE_BREATH, 1);
+=======
+	ADDY_DRAG_POISON(ProjectileID.ADDY_DRAG_POISON, 1),
+
+	/**
+	* the Breath of the Drake
+	*/
+	DRAKE_BREATH(ProjectileID.DRAKE_BREATH, 1),
+	
+	/**
+	 * Cerbs fire
+	 */
+	CERB_FIRE(ProjectileID.CERB_FIRE, 2);
+>>>>>>> ea80c686fd7f2bb54a8ab1411b95a962cce18a20
 
 	private static final Map<Integer, AoeProjectileInfo> map = new HashMap<>();
 

@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @PluginDescriptor(
-        name="Vanguards",
-        enabledByDefault = false,
+        name= "Vanguards",
+        enabledByDefault = true,
         type = PluginType.PVM
 )
 public class VanguardsPlugin extends Plugin {
