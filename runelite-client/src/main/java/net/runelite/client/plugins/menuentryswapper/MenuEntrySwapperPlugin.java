@@ -556,21 +556,40 @@ public class MenuEntrySwapperPlugin extends Plugin
 		{
 			if (target.contains("construct. cape"))
 			{
-				swap("tele to poh", option, target, true);
+				switch (config.swapConCape())
+				{
+					case TELE_TO_POH:
+						swap("tele to poh", option, target, true);
+						break;
+					case TELEPORT:
+						swap("teleport", option, target, true);
+						break;
+					case WEAR:
+						break;
+				}
 			}
-			else
-			{
-				swap("rub", option, target, true);
-				swap("teleport", option, target, true);
-			}
+			else {
+			swap("rub", option, target, true);
+			swap("teleport", option, target, true);
 		}
-		else if (config.swapTeleportItem() && option.equals("remove") && target.contains("construct. cape"))
-		{
-			swap("tele to poh", option, target, true);
 		}
 		else if (config.swapTeleportItem() && option.equals("remove") && target.contains("crafting cape"))
 		{
 			swap("teleport", option, target, true);
+		}
+		else if (config.swapTeleportItem() && option.equals("remove") && target.contains("construct. cape"))
+		{
+			switch (config.swapConCape())
+			{
+				case TELE_TO_POH:
+					swap("tele to poh", option, target, true);
+					break;
+				case TELEPORT:
+					swap("teleport", option, target, true);
+					break;
+				case WEAR:
+					break;
+			}
 		}
 		else if (option.equals("wield"))
 		{

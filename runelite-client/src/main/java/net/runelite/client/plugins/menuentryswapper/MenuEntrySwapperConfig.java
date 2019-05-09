@@ -320,4 +320,14 @@ public interface MenuEntrySwapperConfig extends Config
 	{
 		return true;
 	}
+
+	@ConfigItem(
+			keyName = "swapConCape",
+			name = "Construction cape",
+			description = "Customises the left-click option of the construction cape in the inventory and when worn"
+	)
+	default ConCapeMode swapConCape()
+	{
+		return ConCapeMode.TELE_TO_POH;
+	}
 }
