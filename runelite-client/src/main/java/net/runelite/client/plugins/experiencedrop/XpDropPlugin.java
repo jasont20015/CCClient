@@ -36,12 +36,32 @@ import javax.inject.Inject;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import net.runelite.api.*;
 
 import static net.runelite.api.ScriptID.XPDROP_DISABLED;
-import static net.runelite.client.plugins.attackstyles.AttackStyle.*;
+import static net.runelite.client.plugins.attackstyles.AttackStyle.ACCURATE;
+import static net.runelite.client.plugins.attackstyles.AttackStyle.AGGRESSIVE;
+import static net.runelite.client.plugins.attackstyles.AttackStyle.CASTING;
+import static net.runelite.client.plugins.attackstyles.AttackStyle.CONTROLLED;
+import static net.runelite.client.plugins.attackstyles.AttackStyle.DEFENSIVE;
+import static net.runelite.client.plugins.attackstyles.AttackStyle.DEFENSIVE_CASTING;
+import static net.runelite.client.plugins.attackstyles.AttackStyle.LONGRANGE;
+import static net.runelite.client.plugins.attackstyles.AttackStyle.OTHER;
+import static net.runelite.client.plugins.attackstyles.AttackStyle.RANGING;
 
-import net.runelite.api.events.*;
+import net.runelite.api.Actor;
+import net.runelite.api.Client;
+import net.runelite.api.GameState;
+import net.runelite.api.NPC;
+import net.runelite.api.Player;
+import net.runelite.api.Skill;
+import net.runelite.api.SpriteID;
+import net.runelite.api.VarPlayer;
+import net.runelite.api.Varbits;
+import net.runelite.api.events.ExperienceChanged;
+import net.runelite.api.events.GameTick;
+import net.runelite.api.events.InteractingChanged;
+import net.runelite.api.events.VarbitChanged;
+import net.runelite.api.events.WidgetHiddenChanged;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetID;
 import net.runelite.api.widgets.WidgetInfo;

@@ -34,7 +34,14 @@ import net.runelite.client.plugins.itemstats.SimpleStatBoost;
 import net.runelite.client.plugins.itemstats.BoostedStatBoost;
 import net.runelite.client.plugins.itemstats.stats.Stat;
 import net.runelite.client.plugins.itemstats.StatChange;
-import static net.runelite.client.plugins.itemstats.stats.Stats.*;
+
+import static net.runelite.client.plugins.itemstats.stats.Stats.ATTACK;
+import static net.runelite.client.plugins.itemstats.stats.Stats.DEFENCE;
+import static net.runelite.client.plugins.itemstats.stats.Stats.HITPOINTS;
+import static net.runelite.client.plugins.itemstats.stats.Stats.MAGIC;
+import static net.runelite.client.plugins.itemstats.stats.Stats.RANGED;
+import static net.runelite.client.plugins.itemstats.stats.Stats.STRENGTH;
+
 import net.runelite.client.plugins.itemstats.StatsChanges;
 
 @RequiredArgsConstructor

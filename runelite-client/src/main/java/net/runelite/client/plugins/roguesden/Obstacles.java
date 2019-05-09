@@ -26,8 +26,20 @@ package net.runelite.client.plugins.roguesden;
 
 import com.google.common.collect.Sets;
 import java.util.Set;
-import static net.runelite.api.ObjectID.*;
-import static net.runelite.api.NullObjectID.*;
+
+import static net.runelite.api.NullObjectID.NULL_7235;
+import static net.runelite.api.ObjectID.BLADE_7252;
+import static net.runelite.api.ObjectID.CONTORTION_BARS;
+import static net.runelite.api.ObjectID.FLOOR;
+import static net.runelite.api.ObjectID.FLOOR_7230;
+import static net.runelite.api.ObjectID.FLOOR_7245;
+import static net.runelite.api.ObjectID.LEDGE_7240;
+import static net.runelite.api.ObjectID.PENDULUM;
+import static net.runelite.api.ObjectID.SPINNING_BLADES_7224;
+import static net.runelite.api.ObjectID.WALL_7228;
+import static net.runelite.api.ObjectID.WALL_7229;
+import static net.runelite.api.ObjectID.WALL_7248;
+import static net.runelite.api.ObjectID.WALL_7249;
 
 class Obstacles
 {

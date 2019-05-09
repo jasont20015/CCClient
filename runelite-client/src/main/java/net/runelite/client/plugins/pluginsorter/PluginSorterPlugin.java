@@ -38,7 +38,7 @@ import net.runelite.client.plugins.config.ConfigPanel;
 import net.runelite.client.plugins.config.PluginListItem;
 
 import javax.inject.Inject;
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

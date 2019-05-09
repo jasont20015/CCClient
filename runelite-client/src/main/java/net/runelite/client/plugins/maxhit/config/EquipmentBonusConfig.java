@@ -35,7 +35,12 @@ import net.runelite.client.plugins.maxhit.requirements.AutocastSpellRequirement;
 import net.runelite.client.plugins.maxhit.requirements.Requirement;
 import net.runelite.client.plugins.maxhit.requirements.SpellBookRequirement;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public enum EquipmentBonusConfig

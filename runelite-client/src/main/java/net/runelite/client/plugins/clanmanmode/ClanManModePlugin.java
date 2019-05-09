@@ -1,5 +1,10 @@
 package net.runelite.client.plugins.clanmanmode;
 
+import net.runelite.api.Client;
+import net.runelite.api.GameState;
+import net.runelite.api.MenuEntry;
+import net.runelite.api.Player;
+import net.runelite.api.Varbits;
 import net.runelite.client.eventbus.Subscribe;
 import com.google.inject.Provides;
 import java.util.Collections;
@@ -8,7 +13,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
-import net.runelite.api.*;
+
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;

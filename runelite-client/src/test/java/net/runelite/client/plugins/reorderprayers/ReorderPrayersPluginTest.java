@@ -25,8 +25,37 @@
 package net.runelite.client.plugins.reorderprayers;
 
 import net.runelite.api.Prayer;
-import static net.runelite.api.Prayer.*;
-import static org.junit.Assert.*;
+import static net.runelite.api.Prayer.AUGURY;
+import static net.runelite.api.Prayer.BURST_OF_STRENGTH;
+import static net.runelite.api.Prayer.CHIVALRY;
+import static net.runelite.api.Prayer.CLARITY_OF_THOUGHT;
+import static net.runelite.api.Prayer.EAGLE_EYE;
+import static net.runelite.api.Prayer.HAWK_EYE;
+import static net.runelite.api.Prayer.IMPROVED_REFLEXES;
+import static net.runelite.api.Prayer.INCREDIBLE_REFLEXES;
+import static net.runelite.api.Prayer.MYSTIC_LORE;
+import static net.runelite.api.Prayer.MYSTIC_MIGHT;
+import static net.runelite.api.Prayer.MYSTIC_WILL;
+import static net.runelite.api.Prayer.PIETY;
+import static net.runelite.api.Prayer.PRESERVE;
+import static net.runelite.api.Prayer.PROTECT_FROM_MAGIC;
+import static net.runelite.api.Prayer.PROTECT_FROM_MELEE;
+import static net.runelite.api.Prayer.PROTECT_FROM_MISSILES;
+import static net.runelite.api.Prayer.PROTECT_ITEM;
+import static net.runelite.api.Prayer.RAPID_HEAL;
+import static net.runelite.api.Prayer.RAPID_RESTORE;
+import static net.runelite.api.Prayer.REDEMPTION;
+import static net.runelite.api.Prayer.RETRIBUTION;
+import static net.runelite.api.Prayer.RIGOUR;
+import static net.runelite.api.Prayer.ROCK_SKIN;
+import static net.runelite.api.Prayer.SHARP_EYE;
+import static net.runelite.api.Prayer.SMITE;
+import static net.runelite.api.Prayer.STEEL_SKIN;
+import static net.runelite.api.Prayer.SUPERHUMAN_STRENGTH;
+import static net.runelite.api.Prayer.THICK_SKIN;
+import static net.runelite.api.Prayer.ULTIMATE_STRENGTH;
+import static org.junit.Assert.assertArrayEquals;
+
 import org.junit.Test;
 
 public class ReorderPrayersPluginTest

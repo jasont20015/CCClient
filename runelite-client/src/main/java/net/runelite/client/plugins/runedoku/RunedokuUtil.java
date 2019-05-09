@@ -5,7 +5,9 @@ import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetItem;
 
 import javax.inject.Inject;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 public class RunedokuUtil {

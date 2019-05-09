@@ -24,11 +24,15 @@
  */
 package net.runelite.client.plugins.hydra;
 
-import net.runelite.api.events.*;
+import net.runelite.api.Actor;
+import net.runelite.api.Client;
+import net.runelite.api.NPC;
+import net.runelite.api.events.AnimationChanged;
+import net.runelite.api.events.NpcDespawned;
+import net.runelite.api.events.NpcSpawned;
 import net.runelite.client.eventbus.Subscribe;
 import com.google.inject.Provides;
 import javax.inject.Inject;
-import net.runelite.api.*;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.game.SpriteManager;
 import net.runelite.client.plugins.Plugin;

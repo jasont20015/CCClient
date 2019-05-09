@@ -26,8 +26,15 @@ package net.runelite.client.plugins.attackstyles;
 
 import java.util.HashMap;
 import java.util.Map;
-import static net.runelite.client.plugins.attackstyles.AttackStyle.*;
-
+import static net.runelite.client.plugins.attackstyles.AttackStyle.ACCURATE;
+import static net.runelite.client.plugins.attackstyles.AttackStyle.AGGRESSIVE;
+import static net.runelite.client.plugins.attackstyles.AttackStyle.CASTING;
+import static net.runelite.client.plugins.attackstyles.AttackStyle.CONTROLLED;
+import static net.runelite.client.plugins.attackstyles.AttackStyle.DEFENSIVE;
+import static net.runelite.client.plugins.attackstyles.AttackStyle.DEFENSIVE_CASTING;
+import static net.runelite.client.plugins.attackstyles.AttackStyle.LONGRANGE;
+import static net.runelite.client.plugins.attackstyles.AttackStyle.OTHER;
+import static net.runelite.client.plugins.attackstyles.AttackStyle.RANGING;
 public enum WeaponType
 {
 	TYPE_0(ACCURATE, AGGRESSIVE, null, DEFENSIVE),

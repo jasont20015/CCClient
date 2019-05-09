@@ -15,7 +15,6 @@ import net.runelite.client.rs.bytecode.transformers.ProjectileTransform;
 import net.runelite.http.api.RuneLiteAPI;
 import org.xeustechnologies.jcl.JarClassLoader;
 
-import javax.swing.*;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;

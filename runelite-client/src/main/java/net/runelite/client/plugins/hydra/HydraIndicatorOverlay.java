@@ -24,21 +24,15 @@
  */
 package net.runelite.client.plugins.hydra;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
 import javax.inject.Inject;
 
-import net.runelite.api.*;
-import net.runelite.api.Point;
-import net.runelite.client.game.SpriteManager;
-import net.runelite.client.ui.overlay.*;
-import net.runelite.client.ui.overlay.components.ComponentConstants;
-import net.runelite.client.ui.overlay.components.ImageComponent;
+import net.runelite.client.ui.overlay.Overlay;
+import net.runelite.client.ui.overlay.OverlayPosition;
+import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.components.LineComponent;
 import net.runelite.client.ui.overlay.components.PanelComponent;
-
-import static net.runelite.api.MenuAction.RUNELITE_OVERLAY_CONFIG;
-import static net.runelite.client.ui.overlay.OverlayManager.OPTION_CONFIGURE;
 
 public class HydraIndicatorOverlay extends Overlay {
     private final HydraConfig config;

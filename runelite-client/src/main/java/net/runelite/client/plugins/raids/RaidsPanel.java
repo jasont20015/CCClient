@@ -24,10 +24,10 @@
  */
 package net.runelite.client.plugins.raids;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.lang.reflect.Method;
-import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.swing.JLabel;
 import javax.swing.JButton;

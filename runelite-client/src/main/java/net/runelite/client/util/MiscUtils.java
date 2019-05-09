@@ -5,7 +5,7 @@ import net.runelite.api.Player;
 import net.runelite.api.WorldType;
 import net.runelite.api.coords.WorldPoint;
 
-import java.awt.*;
+import java.awt.Polygon;
 
 public class MiscUtils
 {

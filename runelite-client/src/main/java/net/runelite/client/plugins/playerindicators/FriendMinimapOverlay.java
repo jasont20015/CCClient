@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, Kamiel <https://github.com/Kamielvf>
+ * Copyright (c) 2018, Seth <http://github.com/sethtroll>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,52 +22,45 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package net.runelite.client.plugins.playerindicators;
 
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Polygon;
-import javax.inject.Inject;
+import net.runelite.api.Player;
+import net.runelite.api.Point;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.OverlayUtil;
 
-public class PlayerIndicatorsTileOverlay extends Overlay
+import javax.inject.Inject;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+
+public class FriendMinimapOverlay extends Overlay
 {
-	private final PlayerIndicatorsService playerIndicatorsService;
-	private final PlayerIndicatorsConfig config;
+    private final PlayerIndicatorsConfig config;
+    private final PlayerIndicatorsService playerIndicatorsService;
 
-	@Inject
-	private PlayerIndicatorsTileOverlay(PlayerIndicatorsConfig config, PlayerIndicatorsService playerIndicatorsService)
-	{
-		this.config = config;
-		this.playerIndicatorsService = playerIndicatorsService;
-		setLayer(OverlayLayer.ABOVE_SCENE);
-		setPosition(OverlayPosition.DYNAMIC);
-		setPriority(OverlayPriority.MED);
-	}
+    @Inject
+    private FriendMinimapOverlay(PlayerIndicatorsConfig config, PlayerIndicatorsService playerIndicatorsService)
+    {
+        setPosition(OverlayPosition.DYNAMIC);
+        setLayer(OverlayLayer.ABOVE_WIDGETS);
+        this.config = config;
+        this.playerIndicatorsService = playerIndicatorsService;
+    }
 
-	@Override
-	public Dimension render(Graphics2D graphics)
-	{
-		if (!config.drawTiles())
-		{
-			return null;
-		}
+    @Override
+    public Dimension render(Graphics2D graphics)
+    {
+        playerIndicatorsService.forEachPlayer((player, color) -> renderPlayerMinimapOverlay(graphics, player, color));
+        return null;
+    }
 
-		playerIndicatorsService.forEachPlayer((player, color) ->
-		{
-			final Polygon poly = player.getCanvasTilePoly();
-
-			if (poly != null)
-			{
-				OverlayUtil.renderPolygon(graphics, poly, color);
-			}
-		});
-
-		return null;
-	}
+    private void renderPlayerMinimapOverlay(Graphics2D graphics, Player actor, Color color) {
+        Point minimapLocation = actor.getMinimapLocation();
+        if (!config.highlightFriends() || minimapLocation == null || color == null ||  actor.isClanMember())
+            return;
+        OverlayUtil.renderMinimapLocation(graphics, minimapLocation, color);
+    }
 }

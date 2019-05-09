@@ -26,7 +26,9 @@ package net.runelite.client.plugins.vetion;
 
 import com.google.inject.Provides;
 import lombok.Getter;
-import net.runelite.api.*;
+import net.runelite.api.Actor;
+import net.runelite.api.AnimationID;
+import net.runelite.api.Client;
 import net.runelite.api.events.AnimationChanged;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;

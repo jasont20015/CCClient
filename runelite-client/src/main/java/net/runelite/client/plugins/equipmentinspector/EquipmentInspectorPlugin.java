@@ -51,11 +51,15 @@ import net.runelite.client.util.Text;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import javax.swing.*;
+import javax.swing.SwingUtilities;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
 import java.text.NumberFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
 
 @PluginDescriptor(

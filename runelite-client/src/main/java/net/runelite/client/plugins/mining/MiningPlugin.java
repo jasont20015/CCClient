@@ -30,15 +30,21 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.Provides;
 import lombok.AccessLevel;
 import lombok.Getter;
-import net.runelite.api.*;
-import net.runelite.api.events.*;
+import net.runelite.api.Client;
+import net.runelite.api.GameObject;
+import net.runelite.api.GameState;
+import net.runelite.api.ItemID;
+import net.runelite.api.WallObject;
+import net.runelite.api.events.GameObjectChanged;
+import net.runelite.api.events.GameObjectDespawned;
+import net.runelite.api.events.GameObjectSpawned;
+import net.runelite.api.events.GameStateChanged;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.PluginType;
-import net.runelite.client.plugins.mining.MiningConfig;
 import net.runelite.client.task.Schedule;
 import net.runelite.client.ui.overlay.OverlayManager;
 import javax.inject.Inject;
@@ -46,7 +52,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.Set;
 
-import static net.runelite.api.ObjectID.*;
+import static net.runelite.api.ObjectID.ORE_VEIN_26661;
+import static net.runelite.api.ObjectID.ORE_VEIN_26662;
+import static net.runelite.api.ObjectID.ORE_VEIN_26663;
+import static net.runelite.api.ObjectID.ORE_VEIN_26664;
 
 @PluginDescriptor(
 	name = "Mining",
