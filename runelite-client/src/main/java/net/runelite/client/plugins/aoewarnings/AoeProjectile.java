@@ -4,11 +4,7 @@
  *
  *
  * Modified by farhan1666
-<<<<<<< HEAD
  * 
-=======
- *
->>>>>>> ea80c686fd7f2bb54a8ab1411b95a962cce18a20
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
@@ -31,8 +27,9 @@
  */
 package net.runelite.client.plugins.aoewarnings;
 
-import java.time.Instant;
 import net.runelite.api.coords.LocalPoint;
+
+import java.time.Instant;
 
 public class AoeProjectile
 {
@@ -64,12 +61,7 @@ public class AoeProjectile
 		return aoeProjectileInfo;
 	}
 
-<<<<<<< HEAD
 	public int getProjectileLifetime() {
-=======
-	public int getProjectileLifetime()
-	{
->>>>>>> ea80c686fd7f2bb54a8ab1411b95a962cce18a20
 		return projectileLifetime;
 	}
 }

@@ -1,15 +1,9 @@
 /*
  * Copyright (c) 2018, Adam <Adam@sigterm.info>
  * All rights reserved.
-<<<<<<< HEAD
  * 
  * Modified by farhan1666
  * 
-=======
- *
- * Modified by farhan1666
- *
->>>>>>> ea80c686fd7f2bb54a8ab1411b95a962cce18a20
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
@@ -259,7 +253,6 @@ public interface AoeWarningConfig extends Config
 		return true;
 	}
 
-<<<<<<< HEAD
     @ConfigItem(
             keyName = "drake",
             name = "Drakes Breath",
@@ -268,39 +261,13 @@ public interface AoeWarningConfig extends Config
     default boolean isDrakeEnabled() {
         return true;
     }
-=======
-   	 @ConfigItem(
-            	keyName = "drake",
-            	name = "Drakes Breath",
-            	description = "Configures if Drakes Breath tile markers are displayed"
-    	)
-    	default boolean isDrakeEnabled() 
-	{
-        	return true;
-    	}
-	
-    	@ConfigItem(
-		keyName = "cerbFire",
-		name = "Cerberus Fire",
-		description = "Configures if Cerberus fire tile markers are displayed"
-	)
-	default boolean isCerbFireEnabled()
-	{
-		return true;
-	}
->>>>>>> ea80c686fd7f2bb54a8ab1411b95a962cce18a20
 
 	@ConfigItem(
 		keyName = "delay",
 		name = "Fade delay",
 		description = "Configures the amount of time in milliseconds that the warning lingers for after the projectile has touched the ground"
 	)
-<<<<<<< HEAD
 	default int delay() {
-=======
-	default int delay()
-	{
->>>>>>> ea80c686fd7f2bb54a8ab1411b95a962cce18a20
 		return 300;
 	}
 }

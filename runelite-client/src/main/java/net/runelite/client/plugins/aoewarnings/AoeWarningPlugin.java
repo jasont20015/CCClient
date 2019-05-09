@@ -3,11 +3,7 @@
  * All rights reserved.
  *
  * Modified by farhan1666
-<<<<<<< HEAD
  * 
-=======
- *
->>>>>>> ea80c686fd7f2bb54a8ab1411b95a962cce18a20
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
@@ -32,30 +28,13 @@ package net.runelite.client.plugins.aoewarnings;
 
 
 import com.google.inject.Provides;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import javax.inject.Inject;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.Client;
-import net.runelite.api.GameObject;
-import net.runelite.api.GameState;
-import net.runelite.api.GraphicsObject;
-import net.runelite.api.ObjectID;
-import net.runelite.api.Projectile;
-import net.runelite.api.Tile;
+import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
-import net.runelite.api.events.GameObjectDespawned;
-import net.runelite.api.events.GameObjectSpawned;
-import net.runelite.api.events.GameStateChanged;
-import net.runelite.api.events.GameTick;
-import net.runelite.api.events.ProjectileMoved;
+import net.runelite.api.events.*;
 import net.runelite.client.Notifier;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -63,6 +42,10 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.PluginType;
 import net.runelite.client.ui.overlay.OverlayManager;
+
+import javax.inject.Inject;
+import java.time.Instant;
+import java.util.*;
 
 @PluginDescriptor(
 	name = "AoE Warnings",
@@ -304,10 +287,8 @@ public class AoeWarningPlugin extends Plugin
 				return config.isXarpusEnabled();
 			case ADDY_DRAG_POISON:
 				return config.addyDrags();
-            		case DRAKE_BREATH:
-                		return config.isDrakeEnabled();
-			case CERB_FIRE:
-				return config.isCerbFireEnabled();
+            case DRAKE_BREATH:
+                return config.isDrakeEnabled();
 		}
 
 		return false;

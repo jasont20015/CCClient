@@ -4,11 +4,7 @@
  *
  *
  * Modified by farhan1666
-<<<<<<< HEAD
  * 
-=======
- *
->>>>>>> ea80c686fd7f2bb54a8ab1411b95a962cce18a20
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
@@ -31,17 +27,6 @@
  */
 package net.runelite.client.plugins.aoewarnings;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Polygon;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.Iterator;
-import java.util.Map;
-import javax.annotation.Nullable;
-import javax.inject.Inject;
 import net.runelite.api.Client;
 import net.runelite.api.Perspective;
 import net.runelite.api.Projectile;
@@ -51,7 +36,6 @@ import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 
-<<<<<<< HEAD
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.awt.*;
@@ -60,8 +44,6 @@ import java.time.Duration;
 import java.util.Iterator;
 import java.util.Map;
 
-=======
->>>>>>> ea80c686fd7f2bb54a8ab1411b95a962cce18a20
 public class AoeWarningOverlay extends Overlay
 {
 	private static final int FILL_START_ALPHA = 25;
