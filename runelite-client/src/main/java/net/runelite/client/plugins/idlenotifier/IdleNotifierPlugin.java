@@ -36,92 +36,6 @@ import java.util.List;
 import javax.inject.Inject;
 import net.runelite.api.Actor;
 import net.runelite.api.AnimationID;
-import static net.runelite.api.AnimationID.COOKING_FIRE;
-import static net.runelite.api.AnimationID.COOKING_RANGE;
-import static net.runelite.api.AnimationID.COOKING_WINE;
-import static net.runelite.api.AnimationID.CRAFTING_BATTLESTAVES;
-import static net.runelite.api.AnimationID.CRAFTING_GLASSBLOWING;
-import static net.runelite.api.AnimationID.CRAFTING_LEATHER;
-import static net.runelite.api.AnimationID.CRAFTING_POTTERS_WHEEL;
-import static net.runelite.api.AnimationID.CRAFTING_POTTERY_OVEN;
-import static net.runelite.api.AnimationID.CRAFTING_SPINNING;
-import static net.runelite.api.AnimationID.DENSE_ESSENCE_CHIPPING;
-import static net.runelite.api.AnimationID.DENSE_ESSENCE_CHISELING;
-import static net.runelite.api.AnimationID.FARMING_MIX_ULTRACOMPOST;
-import static net.runelite.api.AnimationID.FISHING_CRUSHING_INFERNAL_EELS;
-import static net.runelite.api.AnimationID.FISHING_CUTTING_SACRED_EELS;
-import static net.runelite.api.AnimationID.FLETCHING_BOW_CUTTING;
-import static net.runelite.api.AnimationID.FLETCHING_STRING_MAGIC_LONGBOW;
-import static net.runelite.api.AnimationID.FLETCHING_STRING_MAGIC_SHORTBOW;
-import static net.runelite.api.AnimationID.FLETCHING_STRING_MAPLE_LONGBOW;
-import static net.runelite.api.AnimationID.FLETCHING_STRING_MAPLE_SHORTBOW;
-import static net.runelite.api.AnimationID.FLETCHING_STRING_NORMAL_LONGBOW;
-import static net.runelite.api.AnimationID.FLETCHING_STRING_NORMAL_SHORTBOW;
-import static net.runelite.api.AnimationID.FLETCHING_STRING_OAK_LONGBOW;
-import static net.runelite.api.AnimationID.FLETCHING_STRING_OAK_SHORTBOW;
-import static net.runelite.api.AnimationID.FLETCHING_STRING_WILLOW_LONGBOW;
-import static net.runelite.api.AnimationID.FLETCHING_STRING_WILLOW_SHORTBOW;
-import static net.runelite.api.AnimationID.FLETCHING_STRING_YEW_LONGBOW;
-import static net.runelite.api.AnimationID.FLETCHING_STRING_YEW_SHORTBOW;
-import static net.runelite.api.AnimationID.GEM_CUTTING_AMETHYST;
-import static net.runelite.api.AnimationID.GEM_CUTTING_DIAMOND;
-import static net.runelite.api.AnimationID.GEM_CUTTING_EMERALD;
-import static net.runelite.api.AnimationID.GEM_CUTTING_JADE;
-import static net.runelite.api.AnimationID.GEM_CUTTING_OPAL;
-import static net.runelite.api.AnimationID.GEM_CUTTING_REDTOPAZ;
-import static net.runelite.api.AnimationID.GEM_CUTTING_RUBY;
-import static net.runelite.api.AnimationID.GEM_CUTTING_SAPPHIRE;
-import static net.runelite.api.AnimationID.HERBLORE_MAKE_TAR;
-import static net.runelite.api.AnimationID.HERBLORE_PESTLE_AND_MORTAR;
-import static net.runelite.api.AnimationID.HERBLORE_POTIONMAKING;
-import static net.runelite.api.AnimationID.HOME_MAKE_TABLET;
-import static net.runelite.api.AnimationID.IDLE;
-import static net.runelite.api.AnimationID.MAGIC_CHARGING_ORBS;
-import static net.runelite.api.AnimationID.MAGIC_ENCHANTING_AMULET_1;
-import static net.runelite.api.AnimationID.MAGIC_ENCHANTING_AMULET_2;
-import static net.runelite.api.AnimationID.MAGIC_ENCHANTING_AMULET_3;
-import static net.runelite.api.AnimationID.MAGIC_ENCHANTING_JEWELRY;
-import static net.runelite.api.AnimationID.MAGIC_LUNAR_SHARED;
-import static net.runelite.api.AnimationID.MAGIC_LUNAR_STRING_JEWELRY;
-import static net.runelite.api.AnimationID.MAGIC_MAKE_TABLET;
-import static net.runelite.api.AnimationID.MINING_3A_PICKAXE;
-import static net.runelite.api.AnimationID.MINING_ADAMANT_PICKAXE;
-import static net.runelite.api.AnimationID.MINING_BLACK_PICKAXE;
-import static net.runelite.api.AnimationID.MINING_BRONZE_PICKAXE;
-import static net.runelite.api.AnimationID.MINING_DRAGON_PICKAXE;
-import static net.runelite.api.AnimationID.MINING_DRAGON_PICKAXE_ORN;
-import static net.runelite.api.AnimationID.MINING_INFERNAL_PICKAXE;
-import static net.runelite.api.AnimationID.MINING_IRON_PICKAXE;
-import static net.runelite.api.AnimationID.MINING_MITHRIL_PICKAXE;
-import static net.runelite.api.AnimationID.MINING_MOTHERLODE_3A;
-import static net.runelite.api.AnimationID.MINING_MOTHERLODE_ADAMANT;
-import static net.runelite.api.AnimationID.MINING_MOTHERLODE_BLACK;
-import static net.runelite.api.AnimationID.MINING_MOTHERLODE_BRONZE;
-import static net.runelite.api.AnimationID.MINING_MOTHERLODE_DRAGON;
-import static net.runelite.api.AnimationID.MINING_MOTHERLODE_DRAGON_ORN;
-import static net.runelite.api.AnimationID.MINING_MOTHERLODE_INFERNAL;
-import static net.runelite.api.AnimationID.MINING_MOTHERLODE_IRON;
-import static net.runelite.api.AnimationID.MINING_MOTHERLODE_MITHRIL;
-import static net.runelite.api.AnimationID.MINING_MOTHERLODE_RUNE;
-import static net.runelite.api.AnimationID.MINING_MOTHERLODE_STEEL;
-import static net.runelite.api.AnimationID.MINING_RUNE_PICKAXE;
-import static net.runelite.api.AnimationID.MINING_STEEL_PICKAXE;
-import static net.runelite.api.AnimationID.PISCARILIUS_CRANE_REPAIR;
-import static net.runelite.api.AnimationID.SAND_COLLECTION;
-import static net.runelite.api.AnimationID.SMITHING_ANVIL;
-import static net.runelite.api.AnimationID.SMITHING_CANNONBALL;
-import static net.runelite.api.AnimationID.SMITHING_SMELTING;
-import static net.runelite.api.AnimationID.USING_GILDED_ALTAR;
-import static net.runelite.api.AnimationID.WOODCUTTING_3A_AXE;
-import static net.runelite.api.AnimationID.WOODCUTTING_ADAMANT;
-import static net.runelite.api.AnimationID.WOODCUTTING_BLACK;
-import static net.runelite.api.AnimationID.WOODCUTTING_BRONZE;
-import static net.runelite.api.AnimationID.WOODCUTTING_DRAGON;
-import static net.runelite.api.AnimationID.WOODCUTTING_INFERNAL;
-import static net.runelite.api.AnimationID.WOODCUTTING_IRON;
-import static net.runelite.api.AnimationID.WOODCUTTING_MITHRIL;
-import static net.runelite.api.AnimationID.WOODCUTTING_RUNE;
-import static net.runelite.api.AnimationID.WOODCUTTING_STEEL;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.GraphicID;
@@ -216,108 +130,108 @@ public class IdleNotifierPlugin extends Plugin
 		switch (animation)
 		{
 			/* Woodcutting */
-			case WOODCUTTING_BRONZE:
-			case WOODCUTTING_IRON:
-			case WOODCUTTING_STEEL:
-			case WOODCUTTING_BLACK:
-			case WOODCUTTING_MITHRIL:
-			case WOODCUTTING_ADAMANT:
-			case WOODCUTTING_RUNE:
-			case WOODCUTTING_DRAGON:
-			case WOODCUTTING_INFERNAL:
-			case WOODCUTTING_3A_AXE:
+			case AnimationID.WOODCUTTING_BRONZE:
+			case AnimationID.WOODCUTTING_IRON:
+			case AnimationID.WOODCUTTING_STEEL:
+			case AnimationID.WOODCUTTING_BLACK:
+			case AnimationID.WOODCUTTING_MITHRIL:
+			case AnimationID.WOODCUTTING_ADAMANT:
+			case AnimationID.WOODCUTTING_RUNE:
+			case AnimationID.WOODCUTTING_DRAGON:
+			case AnimationID.WOODCUTTING_INFERNAL:
+			case AnimationID.WOODCUTTING_3A_AXE:
 			/* Cooking(Fire, Range) */
-			case COOKING_FIRE:
-			case COOKING_RANGE:
-			case COOKING_WINE:
+			case AnimationID.COOKING_FIRE:
+			case AnimationID.COOKING_RANGE:
+			case AnimationID.COOKING_WINE:
 			/* Crafting(Gem Cutting, Glassblowing, Spinning, Battlestaves, Pottery) */
-			case GEM_CUTTING_OPAL:
-			case GEM_CUTTING_JADE:
-			case GEM_CUTTING_REDTOPAZ:
-			case GEM_CUTTING_SAPPHIRE:
-			case GEM_CUTTING_EMERALD:
-			case GEM_CUTTING_RUBY:
-			case GEM_CUTTING_DIAMOND:
-			case GEM_CUTTING_AMETHYST:
-			case CRAFTING_GLASSBLOWING:
-			case CRAFTING_SPINNING:
-			case CRAFTING_BATTLESTAVES:
-			case CRAFTING_LEATHER:
-			case CRAFTING_POTTERS_WHEEL:
-			case CRAFTING_POTTERY_OVEN:
+			case AnimationID.GEM_CUTTING_OPAL:
+			case AnimationID.GEM_CUTTING_JADE:
+			case AnimationID.GEM_CUTTING_REDTOPAZ:
+			case AnimationID.GEM_CUTTING_SAPPHIRE:
+			case AnimationID.GEM_CUTTING_EMERALD:
+			case AnimationID.GEM_CUTTING_RUBY:
+			case AnimationID.GEM_CUTTING_DIAMOND:
+			case AnimationID.GEM_CUTTING_AMETHYST:
+			case AnimationID.CRAFTING_GLASSBLOWING:
+			case AnimationID.CRAFTING_SPINNING:
+			case AnimationID.CRAFTING_BATTLESTAVES:
+			case AnimationID.CRAFTING_LEATHER:
+			case AnimationID.CRAFTING_POTTERS_WHEEL:
+			case AnimationID.CRAFTING_POTTERY_OVEN:
 			/* Fletching(Cutting, Stringing) */
-			case FLETCHING_BOW_CUTTING:
-			case FLETCHING_STRING_NORMAL_SHORTBOW:
-			case FLETCHING_STRING_OAK_SHORTBOW:
-			case FLETCHING_STRING_WILLOW_SHORTBOW:
-			case FLETCHING_STRING_MAPLE_SHORTBOW:
-			case FLETCHING_STRING_YEW_SHORTBOW:
-			case FLETCHING_STRING_MAGIC_SHORTBOW:
-			case FLETCHING_STRING_NORMAL_LONGBOW:
-			case FLETCHING_STRING_OAK_LONGBOW:
-			case FLETCHING_STRING_WILLOW_LONGBOW:
-			case FLETCHING_STRING_MAPLE_LONGBOW:
-			case FLETCHING_STRING_YEW_LONGBOW:
-			case FLETCHING_STRING_MAGIC_LONGBOW:
+			case AnimationID.FLETCHING_BOW_CUTTING:
+			case AnimationID.FLETCHING_STRING_NORMAL_SHORTBOW:
+			case AnimationID.FLETCHING_STRING_OAK_SHORTBOW:
+			case AnimationID.FLETCHING_STRING_WILLOW_SHORTBOW:
+			case AnimationID.FLETCHING_STRING_MAPLE_SHORTBOW:
+			case AnimationID.FLETCHING_STRING_YEW_SHORTBOW:
+			case AnimationID.FLETCHING_STRING_MAGIC_SHORTBOW:
+			case AnimationID.FLETCHING_STRING_NORMAL_LONGBOW:
+			case AnimationID.FLETCHING_STRING_OAK_LONGBOW:
+			case AnimationID.FLETCHING_STRING_WILLOW_LONGBOW:
+			case AnimationID.FLETCHING_STRING_MAPLE_LONGBOW:
+			case AnimationID.FLETCHING_STRING_YEW_LONGBOW:
+			case AnimationID.FLETCHING_STRING_MAGIC_LONGBOW:
 			/* Smithing(Anvil, Furnace, Cannonballs */
-			case SMITHING_ANVIL:
-			case SMITHING_SMELTING:
-			case SMITHING_CANNONBALL:
+			case AnimationID.SMITHING_ANVIL:
+			case AnimationID.SMITHING_SMELTING:
+			case AnimationID.SMITHING_CANNONBALL:
 			/* Fishing */
-			case FISHING_CRUSHING_INFERNAL_EELS:
-			case FISHING_CUTTING_SACRED_EELS:
+			case AnimationID.FISHING_CRUSHING_INFERNAL_EELS:
+			case AnimationID.FISHING_CUTTING_SACRED_EELS:
 			/* Mining(Normal) */
-			case MINING_BRONZE_PICKAXE:
-			case MINING_IRON_PICKAXE:
-			case MINING_STEEL_PICKAXE:
-			case MINING_BLACK_PICKAXE:
-			case MINING_MITHRIL_PICKAXE:
-			case MINING_ADAMANT_PICKAXE:
-			case MINING_RUNE_PICKAXE:
-			case MINING_DRAGON_PICKAXE:
-			case MINING_DRAGON_PICKAXE_ORN:
-			case MINING_INFERNAL_PICKAXE:
-			case MINING_3A_PICKAXE:
-			case DENSE_ESSENCE_CHIPPING:
-			case DENSE_ESSENCE_CHISELING:
+			case AnimationID.MINING_BRONZE_PICKAXE:
+			case AnimationID.MINING_IRON_PICKAXE:
+			case AnimationID.MINING_STEEL_PICKAXE:
+			case AnimationID.MINING_BLACK_PICKAXE:
+			case AnimationID.MINING_MITHRIL_PICKAXE:
+			case AnimationID.MINING_ADAMANT_PICKAXE:
+			case AnimationID.MINING_RUNE_PICKAXE:
+			case AnimationID.MINING_DRAGON_PICKAXE:
+			case AnimationID.MINING_DRAGON_PICKAXE_ORN:
+			case AnimationID.MINING_INFERNAL_PICKAXE:
+			case AnimationID.MINING_3A_PICKAXE:
+			case AnimationID.DENSE_ESSENCE_CHIPPING:
+			case AnimationID.DENSE_ESSENCE_CHISELING:
 			/* Mining(Motherlode) */
-			case MINING_MOTHERLODE_BRONZE:
-			case MINING_MOTHERLODE_IRON:
-			case MINING_MOTHERLODE_STEEL:
-			case MINING_MOTHERLODE_BLACK:
-			case MINING_MOTHERLODE_MITHRIL:
-			case MINING_MOTHERLODE_ADAMANT:
-			case MINING_MOTHERLODE_RUNE:
-			case MINING_MOTHERLODE_DRAGON:
-			case MINING_MOTHERLODE_DRAGON_ORN:
-			case MINING_MOTHERLODE_INFERNAL:
-			case MINING_MOTHERLODE_3A:
+			case AnimationID.MINING_MOTHERLODE_BRONZE:
+			case AnimationID.MINING_MOTHERLODE_IRON:
+			case AnimationID.MINING_MOTHERLODE_STEEL:
+			case AnimationID.MINING_MOTHERLODE_BLACK:
+			case AnimationID.MINING_MOTHERLODE_MITHRIL:
+			case AnimationID.MINING_MOTHERLODE_ADAMANT:
+			case AnimationID.MINING_MOTHERLODE_RUNE:
+			case AnimationID.MINING_MOTHERLODE_DRAGON:
+			case AnimationID.MINING_MOTHERLODE_DRAGON_ORN:
+			case AnimationID.MINING_MOTHERLODE_INFERNAL:
+			case AnimationID.MINING_MOTHERLODE_3A:
 			/* Herblore */
-			case HERBLORE_PESTLE_AND_MORTAR:
-			case HERBLORE_POTIONMAKING:
-			case HERBLORE_MAKE_TAR:
+			case AnimationID.HERBLORE_PESTLE_AND_MORTAR:
+			case AnimationID.HERBLORE_POTIONMAKING:
+			case AnimationID.HERBLORE_MAKE_TAR:
 			/* Magic */
-			case MAGIC_CHARGING_ORBS:
-			case MAGIC_LUNAR_PLANK_MAKE:
-			case MAGIC_LUNAR_STRING_JEWELRY:
-			case MAGIC_MAKE_TABLET:
-			case MAGIC_ENCHANTING_JEWELRY:
-			case MAGIC_ENCHANTING_AMULET_1:
-			case MAGIC_ENCHANTING_AMULET_2:
-			case MAGIC_ENCHANTING_AMULET_3:
+			case AnimationID.MAGIC_CHARGING_ORBS:
+			case AnimationID.MAGIC_LUNAR_PLANK_MAKE:
+			case AnimationID.MAGIC_LUNAR_STRING_JEWELRY:
+			case AnimationID.MAGIC_MAKE_TABLET:
+			case AnimationID.MAGIC_ENCHANTING_JEWELRY:
+			case AnimationID.MAGIC_ENCHANTING_AMULET_1:
+			case AnimationID.MAGIC_ENCHANTING_AMULET_2:
+			case AnimationID.MAGIC_ENCHANTING_AMULET_3:
 			/* Prayer */
-			case USING_GILDED_ALTAR:
+			case AnimationID.USING_GILDED_ALTAR:
 			/* Farming */
-			case FARMING_MIX_ULTRACOMPOST:
+			case AnimationID.FARMING_MIX_ULTRACOMPOST:
 			/* Misc */
-			case PISCARILIUS_CRANE_REPAIR:
-			case HOME_MAKE_TABLET:
-			case SAND_COLLECTION:
+			case AnimationID.PISCARILIUS_CRANE_REPAIR:
+			case AnimationID.HOME_MAKE_TABLET:
+			case AnimationID.SAND_COLLECTION:
 				resetTimers();
 				lastAnimation = animation;
 				lastAnimating = Instant.now();
 				break;
-			case MAGIC_LUNAR_SHARED:
+			case AnimationID.MAGIC_LUNAR_SHARED:
 				if (graphic == GraphicID.BAKE_PIE)
 				{
 					resetTimers();
@@ -325,12 +239,12 @@ public class IdleNotifierPlugin extends Plugin
 					lastAnimating = Instant.now();
 					break;
 				}
-			case IDLE:
+			case AnimationID.IDLE:
 				lastAnimating = Instant.now();
 				break;
 			default:
 				// On unknown animation simply assume the animation is invalid and dont throw notification
-				lastAnimation = IDLE;
+				lastAnimation = AnimationID.IDLE;
 				lastAnimating = null;
 		}
 	}
@@ -723,18 +637,18 @@ public class IdleNotifierPlugin extends Plugin
 
 	private boolean checkAnimationIdle(Duration waitDuration, Player local)
 	{
-		if (lastAnimation == IDLE)
+		if (lastAnimation == AnimationID.IDLE)
 		{
 			return false;
 		}
 
 		final int animation = local.getAnimation();
 
-		if (animation == IDLE)
+		if (animation == AnimationID.IDLE)
 		{
 			if (lastAnimating != null && Instant.now().compareTo(lastAnimating.plus(waitDuration)) >= 0)
 			{
-				lastAnimation = IDLE;
+				lastAnimation = AnimationID.IDLE;
 				lastAnimating = null;
 				return true;
 			}
@@ -755,7 +669,7 @@ public class IdleNotifierPlugin extends Plugin
 		lastAnimating = null;
 		if (client.getGameState() == GameState.LOGIN_SCREEN || local == null || local.getAnimation() != lastAnimation)
 		{
-			lastAnimation = IDLE;
+			lastAnimation = AnimationID.IDLE;
 		}
 
 		// Reset interaction idle timer
