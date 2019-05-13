@@ -330,6 +330,7 @@ public class ScreenshotPlugin extends Plugin
 			if (config.screenshotPlayerDeath())
 			{
 				dying.add(p);
+				return;
 			}
 			else
 			{
