@@ -55,6 +55,7 @@ import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import javax.swing.SwingUtilities;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -108,6 +109,7 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.jetbrains.annotations.Nullable;
 
 @PluginDescriptor(
 		name = "Screenshot",
@@ -263,13 +265,13 @@ public class ScreenshotPlugin extends Plugin
 	@Subscribe
 	public void onGameTick(GameTick event)
 	{
-		if(config.screenshotFriendDeath()) {
+		if(config.screenshotFriendDeath() ) {
 			for (Player p : dying) {
 				//double checking animation in case I did a fucky wucky
 				//in case the action frame is wrong the checking if higher than or equal to
 				//not sure where exactly player lay down, from the limited testing I've done (me lazy) it's frame 8/9ish
 				if (p.getActionFrame() >= 8 && p.getAnimation() == 836) {
-					takeScreenshot(p.getName() + "ded " + format(new Date()));
+					takeScreenshot(p.getName() + " ded " + format(new Date()), "Deaths");
 					dying.remove(p);
 				}
 				//if they get out of range or something, they'll still get removed
@@ -309,7 +311,8 @@ public class ScreenshotPlugin extends Plugin
 
 	@Subscribe
 	public void onAnimationChanged(AnimationChanged e) {
-		if(!config.screenshotFriendDeath())
+		//this got refactored somewhere, but some things were missing
+		if(!config.screenshotFriendDeath() || !config.screenshotPlayerDeath())
 			return;
 
 		if (!(e.getActor() instanceof Player))
@@ -323,6 +326,7 @@ public class ScreenshotPlugin extends Plugin
 		}
 		if(p.getName().equals(client.getLocalPlayer().getName()))
 		{
+
 			if (config.screenshotPlayerDeath())
 			{
 				dying.add(p);
@@ -332,12 +336,13 @@ public class ScreenshotPlugin extends Plugin
 				return;
 			}
 		}
+		if(config.screenshotFriendDeath()) {
+			int tob = client.getVar(Varbits.THEATRE_OF_BLOOD);
 
-		int tob = client.getVar(Varbits.THEATRE_OF_BLOOD);
-
-		if(client.getVar(Varbits.IN_RAID) == 1 || tob == 2 || tob == 3 || p.isFriend()) {
-			//this is the same as the tick counter had, just want to make ss at right timing
-			dying.add(p);
+			if (client.getVar(Varbits.IN_RAID) == 1 || tob == 2 || tob == 3 || p.isFriend()) {
+				//this is the same as the tick counter had, just want to make ss at right timing
+				dying.add(p);
+			}
 		}
 	}
 
@@ -621,7 +626,7 @@ public class ScreenshotPlugin extends Plugin
 		Consumer<Image> imageCallback = (img) ->
 		{
 			// This callback is on the game thread, move to executor thread
-			executor.submit(() -> takeScreenshot(fileName, img));
+			executor.submit(() -> takeScreenshot(fileName, img, null));
 		};
 
 		if (config.displayDate())
@@ -634,7 +639,39 @@ public class ScreenshotPlugin extends Plugin
 		}
 	}
 
-	private void takeScreenshot(String fileName, Image image)
+	/**
+	 * Saves a screenshot of the client window to the screenshot folder as a PNG,
+	 * and optionally uploads it to an image-hosting service.
+	 *
+	 * @param fileName    Filename to use, without file extension.
+	 * @param subdirectory The subdirectory to save it in
+	 */
+	private void takeScreenshot(String fileName, String subdirectory)
+	{
+		if (client.getGameState() == GameState.LOGIN_SCREEN)
+		{
+			// Prevent the screenshot from being captured
+			log.info("Login screenshot prevented");
+			return;
+		}
+
+		Consumer<Image> imageCallback = (img) ->
+		{
+			// This callback is on the game thread, move to executor thread
+				executor.submit(() -> takeScreenshot(fileName, img, subdirectory));
+
+		};
+
+		if (config.displayDate())
+		{
+			screenshotOverlay.queueForTimestamp(imageCallback);
+		}
+		else
+		{
+			drawManager.requestNextFrameListener(imageCallback);
+		}
+	}
+	private void takeScreenshot(String fileName, Image image, @Nullable String subdirectory)
 	{
 		BufferedImage screenshot = config.includeFrame()
 				? new BufferedImage(clientUi.getWidth(), clientUi.getHeight(), BufferedImage.TYPE_INT_ARGB)
@@ -688,6 +725,13 @@ public class ScreenshotPlugin extends Plugin
 		}
 
 		playerFolder.mkdirs();
+
+		if(subdirectory != null){
+			//uhh just tried to do this as workaround, not sure if it's the best idea tho
+			File actualplayerFolder = new File(playerFolder, subdirectory);
+			actualplayerFolder.mkdir();
+			playerFolder = actualplayerFolder;
+		}
 
 		try
 		{
