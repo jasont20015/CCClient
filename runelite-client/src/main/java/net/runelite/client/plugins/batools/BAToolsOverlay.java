@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, Woox <https://github.com/wooxsolo>
+ * Copyright (c) 2018, https://runelitepl.us
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,16 +27,17 @@ package net.runelite.client.plugins.batools;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import net.runelite.api.NPCComposition;
-import javax.inject.Inject;
-import net.runelite.api.Client;
-import net.runelite.client.ui.overlay.OverlayUtil;
-import net.runelite.client.ui.overlay.Overlay;
 import java.time.Duration;
 import java.time.Instant;
+import javax.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.Client;
+import net.runelite.api.NPCComposition;
+import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import lombok.extern.slf4j.Slf4j;
+import net.runelite.client.ui.overlay.OverlayUtil;
+
 @Slf4j
 
 public class BAToolsOverlay extends Overlay
@@ -52,16 +53,14 @@ public class BAToolsOverlay extends Overlay
 	private static final Color GRAY = new Color(158, 158, 158);
 
 	private final BAToolsConfig config;
-	private Client client;
 	private BAToolsPlugin plugin;
 
 	@Inject
-	public BAToolsOverlay(Client client, BAToolsPlugin plugin, BAToolsConfig config)
+	public BAToolsOverlay(BAToolsPlugin plugin, BAToolsConfig config)
 	{
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_SCENE);
 		this.config = config;
-		this.client = client;
 		this.plugin = plugin;
 	}
 
@@ -69,59 +68,43 @@ public class BAToolsOverlay extends Overlay
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		if(config.healerCodes())
+		if (!config.healerCodes())
 		{
-			for (Healer healer : plugin.getHealers().values())
-			{
-				NPCComposition composition = healer.getNpc().getComposition();
-				Color color = composition.getCombatLevel() > 1 ? YELLOW : ORANGE;
-				if (composition.getConfigs() != null)
-				{
-					NPCComposition transformedComposition = composition.transform();
-					if (transformedComposition == null)
-					{
-						color = GRAY;
-					}
-					else
-					{
-						composition = transformedComposition;
-					}
-				}
-				int timeLeft = healer.getLastFoodTime() - (int) Duration.between(plugin.getWave_start(), Instant.now()).getSeconds();
-				timeLeft = timeLeft < 1 ? 0 : timeLeft;
+			return null;
+		}
 
-				if (healer.getFoodRemaining() > 1)
+		for (Healer healer : plugin.getHealers().values())
+		{
+			Color color;
+			int timeLeft = healer.getLastFoodTime() - (int) Duration.between(plugin.getWave_start(), Instant.now()).getSeconds();
+			timeLeft = timeLeft < 1 ? 0 : timeLeft;
+
+			if (healer.getFoodRemaining() > 1)
+			{
+				color = GREEN;
+			}
+			else if (healer.getFoodRemaining() == 1)
+			{
+				if (timeLeft > 0)
 				{
-					color = GREEN;
-				}
-				else if (healer.getFoodRemaining() == 1)
-				{
-					if (timeLeft > 0)
-					{
-						color = RED;
-					}
-					else
-					{
-						color = GREEN;
-					}
+					color = RED;
 				}
 				else
 				{
-					continue;
+					color = GREEN;
 				}
-
-				String text = String.format("%d  %d",
-					healer.getFoodRemaining(),
-					timeLeft);
-
-
-				OverlayUtil.renderActorOverlay(graphics, healer.getNpc(), text, color);
 			}
-		}
+			else
+			{
+				continue;
+			}
 
-		if(!config.eggBoi())
-		{
-			return null;
+			String text = String.format("%d  %d",
+				healer.getFoodRemaining(),
+				timeLeft);
+
+
+			OverlayUtil.renderActorOverlay(graphics, healer.getNpc(), text, color);
 		}
 		return null;
 	}

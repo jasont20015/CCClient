@@ -24,8 +24,8 @@
  */
 package net.runelite.client.plugins.poh;
 
+import com.google.common.collect.ImmutableMap;
 import java.awt.image.BufferedImage;
-import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
 import static net.runelite.api.NullObjectID.NULL_13615;
@@ -198,6 +198,7 @@ import static net.runelite.api.ObjectID.XERICS_TALISMAN_33414;
 import static net.runelite.api.ObjectID.XERICS_TALISMAN_33415;
 import static net.runelite.api.ObjectID.XERICS_TALISMAN_33419;
 
+import static net.runelite.api.ObjectID.*;
 import net.runelite.client.util.ImageUtil;
 
 public enum PohIcons
@@ -224,7 +225,7 @@ public enum PohIcons
 	ALTAR("altar",
 		ALTAR_13179, ALTAR_13180, ALTAR_13181, ALTAR_13182, ALTAR_13183, ALTAR_13184, ALTAR_13185, ALTAR_13186,
 		ALTAR_13187, ALTAR_13188, ALTAR_13189, ALTAR_13190, ALTAR_13191, ALTAR_13192, ALTAR_13193, ALTAR_13194,
-		ALTAR_13194, ALTAR_13196, ALTAR_13197, ALTAR_13198, ALTAR_13199
+		ALTAR_13196, ALTAR_13197, ALTAR_13198, ALTAR_13199
 	),
 	POOLS("pool", POOL_OF_RESTORATION, POOL_OF_REVITALISATION, POOL_OF_REJUVENATION, FANCY_REJUVENATION_POOL, ORNATE_REJUVENATION_POOL),
 	GLORY("glory", AMULET_OF_GLORY),
@@ -251,7 +252,7 @@ public enum PohIcons
 		DIGSITE_PENDANT, DIGSITE_PENDANT_33417, DIGSITE_PENDANT_33418, DIGSITE_PENDANT_33420
 	);
 
-	private static final Map<Integer, PohIcons> minimapIcons = new HashMap<>();
+	private static final Map<Integer, PohIcons> minimapIcons;
 
 	@Getter
 	private final String imageResource;
@@ -262,15 +263,17 @@ public enum PohIcons
 
 	static
 	{
-		PohIcons[] icons = values();
+		ImmutableMap.Builder<Integer, PohIcons> builder = new ImmutableMap.Builder<>();
 
-		for (PohIcons icon : icons)
+		for (PohIcons icon : values())
 		{
 			for (Integer spotId : icon.getIds())
 			{
-				minimapIcons.put(spotId, icon);
+				builder.put(spotId, icon);
 			}
 		}
+
+		minimapIcons = builder.build();
 	}
 
 	PohIcons(String imageResource, int... ids)

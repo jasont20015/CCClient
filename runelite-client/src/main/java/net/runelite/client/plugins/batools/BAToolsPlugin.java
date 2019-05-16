@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2018, Cameron <https://github.com/noremac201>
- * Copyright (c) 2018, Jacob M <https://github.com/jacoblairm>
+ * Copyright (c) 2018, https://runelitepl.us
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,18 +24,13 @@
  */
 package net.runelite.client.plugins.batools;
 
-import net.runelite.api.Item;
-import net.runelite.api.Prayer;
-import net.runelite.api.SoundEffectID;
-import net.runelite.api.Tile;
-import net.runelite.api.kit.KitType;
-import net.runelite.client.eventbus.Subscribe;
 import com.google.inject.Provides;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +45,8 @@ import net.runelite.api.ItemID;
 import net.runelite.api.MenuEntry;
 import net.runelite.api.NPC;
 import net.runelite.api.NpcID;
+import net.runelite.api.Prayer;
+import net.runelite.api.SoundEffectID;
 import net.runelite.api.Varbits;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.ChatMessage;
@@ -64,12 +60,12 @@ import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.events.NpcSpawned;
 import net.runelite.api.events.VarbitChanged;
 import net.runelite.api.events.WidgetLoaded;
-import net.runelite.api.events.WidgetHiddenChanged;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetID;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.config.ConfigManager;
+import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.input.KeyListener;
 import net.runelite.client.input.KeyManager;
@@ -78,7 +74,9 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.PluginType;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.infobox.InfoBoxManager;
+import static net.runelite.client.util.MenuUtil.swap;
 import net.runelite.client.util.Text;
+import org.apache.commons.lang3.ArrayUtils;
 
 @Slf4j
 @PluginDescriptor(
@@ -89,9 +87,9 @@ import net.runelite.client.util.Text;
 )
 public class BAToolsPlugin extends Plugin implements KeyListener
 {
-	int inGameBit = 0;
-	int tickNum;
-	int pastCall = 0;
+	private int inGameBit = 0;
+	private int tickNum;
+	private int pastCall = 0;
 	private int currentWave = 1;
 	private static final int BA_WAVE_NUM_INDEX = 2;
 	private final List<MenuEntry> entries = new ArrayList<>();
@@ -103,12 +101,6 @@ public class BAToolsPlugin extends Plugin implements KeyListener
 
 	@Inject
 	private Client client;
-
-	@Inject
-	private ConfigManager configManager;
-
-	@Inject
-	private ChatMessageManager chatMessageManager;
 
 	@Inject
 	private OverlayManager overlayManager;
@@ -167,97 +159,14 @@ public class BAToolsPlugin extends Plugin implements KeyListener
 	}
 
 	@Subscribe
-	public void onWidgetHiddenChanged(WidgetHiddenChanged event)
-	{
-		Widget weapon = client.getWidget(593, 1);
-
-		if(config.attackStyles()
-			&& weapon!=null
-			&& inGameBit == 1
-			&& (weapon.getText().contains("Crystal halberd") || weapon.getText().contains("Dragon claws"))
-			&& client.getWidget(WidgetInfo.BA_ATK_LISTEN_TEXT)!=null)
-		{
-			String style = client.getWidget(WidgetInfo.BA_ATK_LISTEN_TEXT).getText();
-
-			if(style.contains("Defensive"))
-			{
-				client.getWidget(WidgetInfo.COMBAT_STYLE_ONE).setHidden(true);
-				client.getWidget(WidgetInfo.COMBAT_STYLE_TWO).setHidden(true);
-				client.getWidget(WidgetInfo.COMBAT_STYLE_THREE).setHidden(true);
-				client.getWidget(WidgetInfo.COMBAT_STYLE_FOUR).setHidden(false);
-			}
-			else if(style.contains("Aggressive"))
-			{
-				client.getWidget(WidgetInfo.COMBAT_STYLE_ONE).setHidden(true);
-				client.getWidget(WidgetInfo.COMBAT_STYLE_TWO).setHidden(false);
-				client.getWidget(WidgetInfo.COMBAT_STYLE_THREE).setHidden(true);
-				client.getWidget(WidgetInfo.COMBAT_STYLE_FOUR).setHidden(true);
-			}
-			else if(style.contains("Controlled"))
-			{
-				if(weapon.getText().contains("Crystal halberd"))
-				{
-					client.getWidget(WidgetInfo.COMBAT_STYLE_ONE).setHidden(false);
-					client.getWidget(WidgetInfo.COMBAT_STYLE_THREE).setHidden(true);
-				}
-				else
-				{
-					client.getWidget(WidgetInfo.COMBAT_STYLE_ONE).setHidden(true);
-					client.getWidget(WidgetInfo.COMBAT_STYLE_THREE).setHidden(false);
-				}
-				client.getWidget(WidgetInfo.COMBAT_STYLE_TWO).setHidden(true);
-				client.getWidget(WidgetInfo.COMBAT_STYLE_FOUR).setHidden(true);
-			}
-			else if(style.contains("Accurate") && weapon.getText().contains("Dragon claws"))
-			{
-				client.getWidget(WidgetInfo.COMBAT_STYLE_ONE).setHidden(false);
-				client.getWidget(WidgetInfo.COMBAT_STYLE_TWO).setHidden(true);
-				client.getWidget(WidgetInfo.COMBAT_STYLE_THREE).setHidden(true);
-				client.getWidget(WidgetInfo.COMBAT_STYLE_FOUR).setHidden(true);
-			}
-			else
-			{
-				client.getWidget(WidgetInfo.COMBAT_STYLE_ONE).setHidden(false);
-				client.getWidget(WidgetInfo.COMBAT_STYLE_TWO).setHidden(false);
-				client.getWidget(WidgetInfo.COMBAT_STYLE_THREE).setHidden(false);
-				client.getWidget(WidgetInfo.COMBAT_STYLE_FOUR).setHidden(false);
-			}
-
-		}
-		else
-		{
-			if(client.getWidget(WidgetInfo.COMBAT_STYLE_ONE)!=null)
-			{
-				client.getWidget(WidgetInfo.COMBAT_STYLE_ONE).setHidden(false);
-			}
-			if(client.getWidget(WidgetInfo.COMBAT_STYLE_TWO)!=null)
-			{
-				client.getWidget(WidgetInfo.COMBAT_STYLE_TWO).setHidden(false);
-			}
-			if(client.getWidget(WidgetInfo.COMBAT_STYLE_THREE)!=null)
-			{
-				client.getWidget(WidgetInfo.COMBAT_STYLE_THREE).setHidden(false);
-			}
-			if(client.getWidget(WidgetInfo.COMBAT_STYLE_FOUR)!=null)
-			{
-				client.getWidget(WidgetInfo.COMBAT_STYLE_FOUR).setHidden(false);
-			}
-		}
-	}
-
-	@Subscribe
 	public void onWidgetLoaded(WidgetLoaded event)
 	{
-		switch (event.getGroupId())
+		if (event.getGroupId() == WidgetID.BA_REWARD_GROUP_ID)
 		{
-			case WidgetID.BA_REWARD_GROUP_ID:
+			Widget rewardWidget = client.getWidget(WidgetInfo.BA_REWARD_TEXT);
+			if (rewardWidget != null && rewardWidget.getText().contains("<br>5"))
 			{
-				Widget rewardWidget = client.getWidget(WidgetInfo.BA_REWARD_TEXT);
-
-				if (rewardWidget != null && rewardWidget.getText().contains("<br>5"))
-				{
-					tickNum = 0;
-				}
+				tickNum = 0;
 			}
 		}
 	}
@@ -293,13 +202,76 @@ public class BAToolsPlugin extends Plugin implements KeyListener
 			counter.setCount(tickNum);
 			if (config.defTimer())
 			{
-				log.info("" + tickNum++);
+				tickNum++;
 			}
 		}
 
-		if(config.prayerMetronome() && isAnyPrayerActive())
+		Widget weapon = client.getWidget(593, 1);
+
+		if (config.attackStyles()
+			&& weapon != null
+			&& inGameBit == 1
+			&& weapon.getText().contains("Crystal halberd") || weapon.getText().contains("Dragon claws")
+			&& client.getWidget(WidgetInfo.BA_ATK_LISTEN_TEXT) != null)
 		{
-			for(int i = 0; i < config.prayerMetronomeVolume(); i++)
+			String style = client.getWidget(WidgetInfo.BA_ATK_LISTEN_TEXT).getText();
+
+			if (style.contains("Defensive"))
+			{
+				client.getWidget(WidgetInfo.COMBAT_STYLE_ONE).setHidden(true);
+				client.getWidget(WidgetInfo.COMBAT_STYLE_TWO).setHidden(true);
+				client.getWidget(WidgetInfo.COMBAT_STYLE_THREE).setHidden(true);
+				client.getWidget(WidgetInfo.COMBAT_STYLE_FOUR).setHidden(false);
+			}
+			else if (style.contains("Aggressive"))
+			{
+				client.getWidget(WidgetInfo.COMBAT_STYLE_ONE).setHidden(true);
+				client.getWidget(WidgetInfo.COMBAT_STYLE_TWO).setHidden(false);
+				client.getWidget(WidgetInfo.COMBAT_STYLE_THREE).setHidden(true);
+				client.getWidget(WidgetInfo.COMBAT_STYLE_FOUR).setHidden(true);
+			}
+			else if (style.contains("Controlled"))
+			{
+				if (weapon.getText().contains("Crystal halberd"))
+				{
+					client.getWidget(WidgetInfo.COMBAT_STYLE_ONE).setHidden(false);
+					client.getWidget(WidgetInfo.COMBAT_STYLE_THREE).setHidden(true);
+				}
+				else
+				{
+					client.getWidget(WidgetInfo.COMBAT_STYLE_ONE).setHidden(true);
+					client.getWidget(WidgetInfo.COMBAT_STYLE_THREE).setHidden(false);
+				}
+				client.getWidget(WidgetInfo.COMBAT_STYLE_TWO).setHidden(true);
+				client.getWidget(WidgetInfo.COMBAT_STYLE_FOUR).setHidden(true);
+			}
+			else if (style.contains("Accurate") && weapon.getText().contains("Dragon claws"))
+			{
+				client.getWidget(WidgetInfo.COMBAT_STYLE_ONE).setHidden(false);
+				client.getWidget(WidgetInfo.COMBAT_STYLE_TWO).setHidden(true);
+				client.getWidget(WidgetInfo.COMBAT_STYLE_THREE).setHidden(true);
+				client.getWidget(WidgetInfo.COMBAT_STYLE_FOUR).setHidden(true);
+			}
+			else
+			{
+				client.getWidget(WidgetInfo.COMBAT_STYLE_ONE).setHidden(false);
+				client.getWidget(WidgetInfo.COMBAT_STYLE_TWO).setHidden(false);
+				client.getWidget(WidgetInfo.COMBAT_STYLE_THREE).setHidden(false);
+				client.getWidget(WidgetInfo.COMBAT_STYLE_FOUR).setHidden(false);
+			}
+
+		}
+		else
+		{
+			client.getWidget(WidgetInfo.COMBAT_STYLE_ONE).setHidden(false);
+			client.getWidget(WidgetInfo.COMBAT_STYLE_TWO).setHidden(false);
+			client.getWidget(WidgetInfo.COMBAT_STYLE_THREE).setHidden(false);
+			client.getWidget(WidgetInfo.COMBAT_STYLE_FOUR).setHidden(false);
+		}
+
+		if (config.prayerMetronome() && isAnyPrayerActive())
+		{
+			for (int i = 0; i < config.prayerMetronomeVolume(); i++)
 			{
 				client.playSoundEffect(SoundEffectID.GE_INCREMENT_PLOP);
 			}
@@ -373,7 +345,6 @@ public class BAToolsPlugin extends Plugin implements KeyListener
 			{
 				int spawnNumber = healers.size();
 				healers.put(npc, new Healer(npc, spawnNumber, currentWave));
-				log.info("spawn number: " + spawnNumber + " on wave " + currentWave);
 			}
 		}
 	}
@@ -411,13 +382,13 @@ public class BAToolsPlugin extends Plugin implements KeyListener
 	{
 		Actor opponent = event.getTarget();
 
-		if (opponent != null && opponent instanceof NPC && isNpcHealer(((NPC) opponent).getId()) && event.getSource() != client.getLocalPlayer())
+		if (opponent instanceof NPC && isNpcHealer(((NPC) opponent).getId()) && event.getSource() != client.getLocalPlayer())
 		{
 			lastInteracted = opponent;
 		}
 	}
 
-	public static boolean isNpcHealer(int npcId)
+	private static boolean isNpcHealer(int npcId)
 	{
 		return npcId == NpcID.PENANCE_HEALER ||
 			npcId == NpcID.PENANCE_HEALER_5766 ||
@@ -458,24 +429,137 @@ public class BAToolsPlugin extends Plugin implements KeyListener
 			if (correctCall != null) //&& callWidget.getTextColor()==16316664)
 			{
 				entries.add(correctCall);
-				client.setMenuEntries(entries.toArray(new MenuEntry[entries.size()]));
+				client.setMenuEntries(entries.toArray(new MenuEntry[0]));
 			}
 		}
-		else if (config.calls() && event.getTarget().endsWith("horn"))
-		{
-			entries.clear();
-			client.setMenuEntries(entries.toArray(new MenuEntry[entries.size()]));
-		}
 
+		final int itemId = event.getIdentifier();
 		String option = Text.removeTags(event.getOption()).toLowerCase();
 		String target = Text.removeTags(event.getTarget()).toLowerCase();
 
+
 		if (config.swapLadder() && option.equals("climb-down") && target.equals("ladder"))
 		{
-			swap("quick-start", option, target, true);
+			swap(client, "quick-start", option, target, true);
+		}
+		else if (config.removeBA() && client.getVar(Varbits.IN_GAME_BA) == 1 && !option.contains("tell-"))//if in barbarian assault and menu isnt from a horn
+		{
+			if (itemId == ItemID.LOGS && !target.contains("healing vial"))
+			{
+				if (client.getWidget(WidgetInfo.BA_DEF_ROLE_TEXT) == null)
+				{
+					remove(new String[]{"take", "light"}, target, true);
+				}
+				else//remove "Light" option (and "Take" option if not defender).
+				{
+					remove("light", target, true);
+				}
+			}
+			else if (option.equals("use"))
+			{
+				if (config.removeHealWrongFood())
+				{
+					Widget healer = client.getWidget(WidgetInfo.BA_HEAL_LISTEN_TEXT);
+					if (healer != null)
+					{
+						String item = target.split("-")[0].trim();
+						List<String> poison = Arrays.asList("poisoned tofu", "poisoned meat", "poisoned worms");
+						List<String> vials = Arrays.asList("healing vial", "healing vial(1)", "healing vial(2)", "healing vial(3)", "healing vial(4)");//"healing vial(4)"
+						if (poison.contains(item))
+						{//if item is a poison item
+							int calledPoison = 0;
+							switch (healer.getText())//choose which poison to hide the use/destroy option for
+							{
+								case "Pois. Tofu":
+									calledPoison = ItemID.POISONED_TOFU;
+									break;
+								case "Pois. Meat":
+									calledPoison = ItemID.POISONED_MEAT;
+									break;
+								case "Pois. Worms":
+									calledPoison = ItemID.POISONED_WORMS;
+									break;
+							}
+							System.out.println(target.equals(item));
+							if (target.equals(item))//if targeting the item itself
+							{
+								if (calledPoison != 0 && itemId != calledPoison)//if no call or chosen item is not the called one
+								{
+									remove(new String[]{"use", "destroy", "examine"}, target, true);//remove options
+								}
+							}
+							else if (!target.contains("penance healer"))
+							{
+								remove(option, target, true);
+							}
+						}
+						else if (vials.contains(item))//if item is the healer's healing vial
+						{
+
+							if (!target.equals(item))//if target is not the vial itself
+							{
+
+								if (!target.contains("level") || target.contains("penance") || target.contains("queen spawn"))//if someone has "penance" or "queen spawn" in their name, gg...
+								{
+									remove(option, target, true);
+								}
+							}
+						}
+					}
+				}
+			}
+			else if (option.equals("attack") && client.getWidget(WidgetInfo.BA_ATK_ROLE_TEXT) == null && !target.equals("queen spawn"))//if not attacker
+			{//remove attack option from everything but queen spawns
+				remove(option, target, true);
+			}
+			else if ((option.equals("fix") || (option.equals("block") && target.equals("penance cave"))) && client.getWidget(WidgetInfo.BA_DEF_ROLE_TEXT) == null)//if not defender
+			{//the check for option requires checking target as well because defensive attack style option is also called "block".
+				remove(option, target, true);
+			}
+			else if ((option.equals("load")) && client.getWidget(WidgetInfo.BA_COLL_ROLE_TEXT) == null)//if not collector, remove hopper options
+			{
+				remove(new String[]{option, "look-in"}, target, true);
+			}
+			else if (config.removeWrongEggs() && option.equals("take"))
+			{
+				Widget eggToColl = client.getWidget(WidgetInfo.BA_COLL_LISTEN_TEXT);
+				if (eggToColl != null)//if we're a collector
+				{
+					List<Integer> eggsToHide = new ArrayList<>();
+					eggsToHide.add(ItemID.HAMMER);
+					switch (eggToColl.getText())//choose which eggs to hide take option for
+					{
+						case "Red eggs":
+							eggsToHide.add(ItemID.BLUE_EGG);
+							eggsToHide.add(ItemID.GREEN_EGG);
+							break;
+						case "Blue eggs":
+							eggsToHide.add(ItemID.RED_EGG);
+							eggsToHide.add(ItemID.GREEN_EGG);
+							break;
+						case "Green eggs":
+							eggsToHide.add(ItemID.RED_EGG);
+							eggsToHide.add(ItemID.BLUE_EGG);
+							break;
+					}
+					if (eggsToHide.contains(itemId))
+					{
+						remove(option, target, true);//hide wrong eggs
+					}
+				}
+				else
+				{
+					List<Integer> defenderItems = Arrays.asList(ItemID.HAMMER, ItemID.TOFU, ItemID.CRACKERS, ItemID.WORMS);//logs are handled separately due to hiding "light" option too.
+					if (client.getWidget(WidgetInfo.BA_DEF_ROLE_TEXT) == null || !defenderItems.contains(itemId))//if not defender, or item is not a defenderItem
+					{
+						remove(option, target, true);//hide everything except hammer/logs and bait if Defender
+					}
+				}
+			}
 		}
 
-		if ((event.getTarget().contains("Penance Healer") || event.getTarget().contains("Penance Fighter") || event.getTarget().contains("Penance Ranger")))
+
+		if (inGameBit == 1 && config.healerMenuOption() && event.getTarget().contains("Penance Healer"))
 		{
 
 			MenuEntry[] menuEntries = client.getMenuEntries();
@@ -502,7 +586,7 @@ public class BAToolsPlugin extends Plugin implements KeyListener
 		if (client.getWidget(WidgetInfo.BA_COLL_LISTEN_TEXT) != null && inGameBit == 1 && config.eggBoi() && event.getTarget().endsWith("egg") && shiftDown)
 		{
 			String[] currentCall = client.getWidget(WidgetInfo.BA_COLL_LISTEN_TEXT).getText().split(" ");
-			log.info("1 " + currentCall[0]);
+
 			MenuEntry[] menuEntries = client.getMenuEntries();
 			MenuEntry correctEgg = null;
 			entries.clear();
@@ -522,23 +606,7 @@ public class BAToolsPlugin extends Plugin implements KeyListener
 			{
 				entries.add(correctEgg);
 			}
-			client.setMenuEntries(entries.toArray(new MenuEntry[entries.size()]));
-		}
-
-		if (client.getWidget(WidgetInfo.BA_ATK_LISTEN_TEXT) != null && inGameBit == 1 && config.attackStyles() && shiftDown)
-		{
-			MenuEntry[] menuEntries = client.getMenuEntries();
-			MenuEntry correctEgg = null;
-			entries.clear();
-
-			for (MenuEntry entry : menuEntries)
-			{
-				if (entry.getOption().contains("Walk here"))
-				{
-					entries.add(entry);
-				}
-			}
-			client.setMenuEntries(entries.toArray(new MenuEntry[entries.size()]));
+			client.setMenuEntries(entries.toArray(new MenuEntry[0]));
 		}
 
 		if (client.getWidget(WidgetInfo.BA_HEAL_LISTEN_TEXT) != null && inGameBit == 1 && config.osHelp() && event.getTarget().equals("<col=ffff>Healer item machine") && shiftDown)
@@ -573,26 +641,25 @@ public class BAToolsPlugin extends Plugin implements KeyListener
 	@Subscribe
 	public void onMenuOptionClicked(MenuOptionClicked event)
 	{
-		if(config.tagging() && (event.getMenuTarget().contains("Penance Ranger") || event.getMenuTarget().contains("Penance Fighter")))
+		if (!config.healerMenuOption() || !event.getMenuTarget().contains("Penance Healer") || client.getWidget(WidgetInfo.BA_HEAL_CALL_TEXT) == null)
 		{
-			String target = event.getMenuTarget();
-			if (event.getMenuOption().contains("Attack"))
-			{
-				foodPressed.put(event.getId(), Instant.now());
-			}
-			log.info(target);
+			return;
 		}
 
-		if (config.healerMenuOption() && event.getMenuTarget().contains("Penance Healer"))
+		String currentCall = client.getWidget(WidgetInfo.BA_HEAL_CALL_TEXT).getText();
+		String target = event.getMenuTarget();
+
+		if ((currentCall.equals("Pois. Worms") && (target.contains("Poisoned worms") && target.contains("->") && target.contains("Penance Healer")))
+			|| (currentCall.equals("Pois. Meat") && (target.contains("Poisoned meat") && target.contains("->") && target.contains("Penance Healer")))
+			|| (currentCall.equals("Pois. Tofu") && (target.contains("Poisoned tofu") && target.contains("->") && target.contains("Penance Healer"))))
 		{
-			String target = event.getMenuTarget();
-			if (target.contains("->"))
-			{
-				foodPressed.put(event.getId(), Instant.now());
-			}
+			foodPressed.put(event.getId(), Instant.now());
 		}
 
-
+		if (target.contains("->") && target.contains("Penance Healer"))
+		{
+			foodPressed.put(event.getId(), Instant.now());
+		}
 	}
 
 	@Subscribe
@@ -630,21 +697,30 @@ public class BAToolsPlugin extends Plugin implements KeyListener
 		counter = null;
 	}
 
-	private void swap(String optionA, String optionB, String target, boolean strict)
+	private void remove(String option, String target, boolean strict)
 	{
 		MenuEntry[] entries = client.getMenuEntries();
-
-		int idxA = searchIndex(entries, optionA, target, strict);
-		int idxB = searchIndex(entries, optionB, target, strict);
-
-		if (idxA >= 0 && idxB >= 0)
+		int idx = searchIndex(entries, option, target, strict);
+		if (idx >= 0 && entries[idx] != null)
 		{
-			MenuEntry entry = entries[idxA];
-			entries[idxA] = entries[idxB];
-			entries[idxB] = entry;
-
+			entries = ArrayUtils.removeElement(entries, entries[idx]);
 			client.setMenuEntries(entries);
 		}
+	}
+
+	private void remove(String[] options, String target, boolean strict)
+	{
+		MenuEntry[] entries = client.getMenuEntries();
+		for (String option : options)
+		{
+			int idx = searchIndex(entries, option, target, strict);
+			if (idx >= 0 && entries[idx] != null)
+			{
+				entries = ArrayUtils.removeElement(entries, entries[idx]);
+			}
+		}
+
+		client.setMenuEntries(entries);
 	}
 
 	private int searchIndex(MenuEntry[] entries, String option, String target, boolean strict)

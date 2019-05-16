@@ -1,9 +1,26 @@
 /*
- * THIS SOFTWARE WRITTEN BY A KEYBOARD-WIELDING MONKEY BOI
- * No rights reserved. Use, redistribute, and modify at your own discretion,
- * and in accordance with Yagex and RuneLite guidelines.
- * However, aforementioned monkey would prefer if you don't sell this plugin for profit.
- * Good luck on your raids!
+ * Copyright (c) 2019, xzact <https://github.com/xzact>
+ * Copyright (c) 2019, ganom <https://github.com/Ganom>
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 package net.runelite.client.plugins.zcox;
@@ -20,7 +37,7 @@ public interface CoxConfig extends Config
 		position = 0,
 		keyName = "Muttadile",
 		name = "Muttadile Marker",
-		description = ""
+		description = "Muttadile Melee range"
 	)
 	default boolean Muttadile()
 	{
@@ -31,7 +48,7 @@ public interface CoxConfig extends Config
 		position = 1,
 		keyName = "Tekton",
 		name = "Tekton Marker",
-		description = ""
+		description = "Tekton Melee range"
 	)
 	default boolean Tekton()
 	{
@@ -42,7 +59,7 @@ public interface CoxConfig extends Config
 		position = 2,
 		keyName = "Guardians",
 		name = "Guardians timing",
-		description = ""
+		description = ":cccwaitwhat:"
 	)
 	default boolean Guardians()
 	{
@@ -78,17 +95,6 @@ public interface CoxConfig extends Config
 		description = ""
 	)
 	default boolean OlmCrystals()
-	{
-		return true;
-	}
-
-	@ConfigItem(
-		position = 6,
-		keyName = "LargeCrystals",
-		name = "Mark Large AoE Crystals rather then small ones",
-		description = ""
-	)
-	default boolean LargeCrystals()
 	{
 		return true;
 	}

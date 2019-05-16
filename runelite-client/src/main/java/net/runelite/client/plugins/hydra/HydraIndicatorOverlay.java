@@ -27,44 +27,49 @@ package net.runelite.client.plugins.hydra;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import javax.inject.Inject;
-
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.components.LineComponent;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 
-public class HydraIndicatorOverlay extends Overlay {
-    private final HydraConfig config;
-    private final HydraPlugin plugin;
+public class HydraIndicatorOverlay extends Overlay
+{
+	private final HydraConfig config;
+	private final HydraPlugin plugin;
+	private final PanelComponent panelComponent = new PanelComponent();
 
-    private final PanelComponent panelComponent = new PanelComponent();
+	@Inject
+	private HydraIndicatorOverlay(HydraConfig config, HydraPlugin plugin)
+	{
+		this.config = config;
+		this.plugin = plugin;
+		setPosition(OverlayPosition.BOTTOM_RIGHT);
+		setPriority(OverlayPriority.MED);
+		panelComponent.setPreferredSize(new Dimension(14, 0));
+	}
 
-    @Inject
-    private HydraIndicatorOverlay(HydraConfig config, HydraPlugin plugin) {
-        this.config = config;
-        this.plugin = plugin;
-        setPosition(OverlayPosition.BOTTOM_RIGHT);
-        setPriority(OverlayPriority.MED);
-        panelComponent.setPreferredSize(new Dimension(14, 0));
-    }
+	@Override
+	public Dimension render(Graphics2D graphics)
+	{
+		if (!config.PrayerHelper())
+		{
+			return null;
+		}
 
-    @Override
-    public Dimension render(Graphics2D graphics) {
-        if (!config.PrayerHelper()) {
-            return null;
-        }
-
-        if (plugin.Hydra != null) {
-            if (plugin.hydras.containsKey(plugin.Hydra.getIndex())) {
-                int val = plugin.hydras.get(plugin.Hydra.getIndex());
-                if (val != 0) {
-                    panelComponent.getChildren().clear();
-                    panelComponent.getChildren().add(LineComponent.builder().right(Integer.toString(val)).build());
-                    return panelComponent.render(graphics);
-                }
-            }
-        }
-        return null;
-    }
+		if (plugin.Hydra != null)
+		{
+			if (plugin.hydras.containsKey(plugin.Hydra.getIndex()))
+			{
+				int val = plugin.hydras.get(plugin.Hydra.getIndex());
+				if (val != 0)
+				{
+					panelComponent.getChildren().clear();
+					panelComponent.getChildren().add(LineComponent.builder().right(Integer.toString(val)).build());
+					return panelComponent.render(graphics);
+				}
+			}
+		}
+		return null;
+	}
 }

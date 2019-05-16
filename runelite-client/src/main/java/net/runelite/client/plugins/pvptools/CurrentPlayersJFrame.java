@@ -29,7 +29,7 @@ import java.util.List;
 public class CurrentPlayersJFrame extends JFrame
 {
 
-	public JList currentPlayersJList;
+	public JList<Object> currentPlayersJList;
 
 	CurrentPlayersJFrame(Client client, PvpToolsPlugin pvpToolsPlugin, List<String> list)
 	{
@@ -42,7 +42,7 @@ public class CurrentPlayersJFrame extends JFrame
 		JButton refreshJButton = new JButton("Refresh");
 		refreshJButton.addActionListener(pvpToolsPlugin.currentPlayersActionListener);
 		JButton copyJButton = new JButton("Copy List");
-		currentPlayersJList = new JList(list.toArray());
+		currentPlayersJList = new JList<>(list.toArray());
 		ActionListener copyButtonActionListener = e ->
 		{
 			StringSelection stringSelection;

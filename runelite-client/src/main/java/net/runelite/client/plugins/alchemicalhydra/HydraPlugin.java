@@ -189,7 +189,7 @@ public class HydraPlugin extends Plugin
 					log.debug("Tried some weird shit");
 					break;
 			}
-			}
+		}
 
 		else if (actor.getAnimation() == phase.getSpecAnimationId() && phase.getSpecAnimationId() != 0)
 		{
@@ -229,8 +229,12 @@ public class HydraPlugin extends Plugin
 
 		if (hydra.getPhase().getSpecProjectileId() != 0 && hydra.getPhase().getSpecProjectileId() == id)
 		{
+			if (poisonProjectiles.isEmpty())
+			{
+				// Only add 9 to next special on the first poison projectile (whoops)
+				hydra.setNextSpecial(hydra.getNextSpecial() + 9);
+			}
 			poisonProjectiles.put(event.getPosition(), projectile);
-			hydra.setNextSpecial(hydra.getNextSpecial() + 9);
 		}
 		else if (client.getTickCount() != lastAttackTick
 			&& (id == Hydra.AttackStyle.MAGIC.getProjId() || id == Hydra.AttackStyle.RANGED.getProjId()))

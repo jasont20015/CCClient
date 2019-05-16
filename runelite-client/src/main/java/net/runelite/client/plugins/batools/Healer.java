@@ -32,7 +32,7 @@ import net.runelite.api.NPC;
 import net.runelite.api.Actor;
 
 
-public class Healer
+class Healer
 {
 
 	@Getter
@@ -62,9 +62,7 @@ public class Healer
 	@Setter
 	private int secondCallFood;
 
-
-
-	public Healer(NPC npc, int spawnNumber, int wave)
+	Healer(NPC npc, int spawnNumber, int wave)
 	{
 		this.npc = npc;
 		this.wave = wave;
@@ -99,10 +97,7 @@ public class Healer
 				return HealerCode.WAVENINE;
 			case 10:
 				return HealerCode.WAVETEN;
-				default: return null;
+			default: return null;
 		}
 	}
-
-
-
 }

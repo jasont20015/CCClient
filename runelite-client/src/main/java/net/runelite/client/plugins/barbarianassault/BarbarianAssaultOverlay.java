@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, Cameron <https://github.com/noremac201>
+ * Copyright (c) 2018, https://runelitepl.us
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,6 +31,7 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.Stroke;
+import java.awt.image.BufferedImage;
 import java.util.Map;
 import javax.inject.Inject;
 import lombok.Getter;
@@ -44,12 +45,17 @@ import net.runelite.api.Point;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.widgets.Widget;
+import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.api.widgets.WidgetItem;
+import net.runelite.client.game.ItemManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import static net.runelite.client.ui.overlay.OverlayManager.OPTION_CONFIGURE;
 import net.runelite.client.ui.overlay.OverlayMenuEntry;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayUtil;
+import net.runelite.client.util.ImageUtil;
+
 
 class BarbarianAssaultOverlay extends Overlay
 {
@@ -60,6 +66,7 @@ class BarbarianAssaultOverlay extends Overlay
 	private static final int OFFSET_Z = 20;
 
 	private final Client client;
+	private final ItemManager itemManager;
 	private final BarbarianAssaultPlugin plugin;
 	private final BarbarianAssaultConfig config;
 
@@ -67,13 +74,15 @@ class BarbarianAssaultOverlay extends Overlay
 	@Setter
 	private Round currentRound;
 
+
 	@Inject
-	private BarbarianAssaultOverlay(Client client, BarbarianAssaultPlugin plugin, BarbarianAssaultConfig config)
+	private BarbarianAssaultOverlay(Client client, ItemManager itemManager, BarbarianAssaultPlugin plugin, BarbarianAssaultConfig config)
 	{
 		super(plugin);
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_WIDGETS);
 		this.client = client;
+		this.itemManager = itemManager;
 		this.plugin = plugin;
 		this.config = config;
 		getMenuEntries().add(new OverlayMenuEntry(RUNELITE_OVERLAY_CONFIG, OPTION_CONFIGURE, "B.A. overlay"));
@@ -130,6 +139,27 @@ class BarbarianAssaultOverlay extends Overlay
 			// Always show yellow eggs
 			renderEggLocations(graphics, yellowEggMap, Color.YELLOW);
 		}
+		Widget inventory = client.getWidget(WidgetInfo.INVENTORY);
+
+		if (config.highlightItems() && inventory != null && !inventory.isHidden() && ((role == Role.DEFENDER || role == Role.HEALER)))
+		{
+			int listenItemId = plugin.getListenItemId(role.getListen());
+
+			if (listenItemId != -1)
+			{
+				Color color = config.highlightColor();
+				BufferedImage highlight = ImageUtil.fillImage(itemManager.getImage(listenItemId), new Color(color.getRed(), color.getGreen(), color.getBlue(), 150));
+
+				for (WidgetItem item : inventory.getWidgetItems())
+				{
+					if (item.getId() == listenItemId)
+					{
+						OverlayUtil.renderImageLocation(graphics, item.getCanvasLocation(), highlight);
+					}
+				}
+			}
+		}
+
 		if (role == Role.HEALER)
 		{
 			for (HealerTeam teammate : HealerTeam.values())
@@ -156,7 +186,20 @@ class BarbarianAssaultOverlay extends Overlay
 				graphics.fillRect(x, y, filledWidth, HEALTH_BAR_HEIGHT);
 			}
 		}
+
 		return null;
+	}
+
+	private static int getBarWidth(int base, int current, int size)
+	{
+		final double ratio = (double) current / base;
+
+		if (ratio >= 1)
+		{
+			return size;
+		}
+
+		return (int) Math.round(ratio * size);
 	}
 
 	private void renderEggLocations(Graphics2D graphics, Map<WorldPoint, Integer> eggMap, Color color)
@@ -200,17 +243,5 @@ class BarbarianAssaultOverlay extends Overlay
 		}
 
 		graphics.setStroke(originalStroke);
-	}
-
-	private static int getBarWidth(int base, int current, int size)
-	{
-		final double ratio = (double) current / base;
-
-		if (ratio >= 1)
-		{
-			return size;
-		}
-
-		return (int) Math.round(ratio * size);
 	}
 }

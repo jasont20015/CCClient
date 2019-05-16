@@ -27,6 +27,7 @@ package net.runelite.client.plugins.barrows;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.google.inject.Provides;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.Set;
 import javax.inject.Inject;
@@ -37,7 +38,9 @@ import net.runelite.api.GameObject;
 import net.runelite.api.GameState;
 import net.runelite.api.NullObjectID;
 import net.runelite.api.ObjectID;
+import net.runelite.api.SpriteID;
 import net.runelite.api.WallObject;
+import net.runelite.api.events.ConfigChanged;
 import net.runelite.api.events.GameObjectChanged;
 import net.runelite.api.events.GameObjectDespawned;
 import net.runelite.api.events.GameObjectSpawned;
@@ -49,11 +52,21 @@ import net.runelite.api.events.WidgetLoaded;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetID;
 import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
+import net.runelite.client.game.ItemManager;
+import net.runelite.client.game.SpriteManager;
+import net.runelite.client.plugins.Plugin;
+import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.ui.overlay.OverlayManager;
+import net.runelite.client.ui.overlay.infobox.InfoBoxManager;
+import net.runelite.client.ui.overlay.infobox.InfoBoxPriority;
+import net.runelite.client.ui.overlay.infobox.LoopTimer;
+import net.runelite.client.util.StackFormatter;
 
 @PluginDescriptor(
 	name = "Barrows Brothers",
@@ -80,11 +93,17 @@ public class BarrowsPlugin extends Plugin
 		WidgetInfo.BARROWS_PUZZLE_ANSWER3
 	);
 
+	private static final long PRAYER_DRAIN_INTERVAL_MS = 18200;
+	private static final int CRYPT_REGION_ID = 14231;
+
 	@Getter(AccessLevel.PACKAGE)
 	private final Set<WallObject> walls = new HashSet<>();
 
 	@Getter(AccessLevel.PACKAGE)
 	private final Set<GameObject> ladders = new HashSet<>();
+
+	private LoopTimer barrowsPrayerDrainTimer;
+	private boolean wasInCrypt = false;
 
 	@Getter
 	private Widget puzzleAnswer;
@@ -100,6 +119,18 @@ public class BarrowsPlugin extends Plugin
 
 	@Inject
 	private Client client;
+
+	@Inject
+	private ItemManager itemManager;
+
+	@Inject
+	private SpriteManager spriteManager;
+
+	@Inject
+	private InfoBoxManager infoBoxManager;
+
+	@Inject
+	private ChatMessageManager chatMessageManager;
 
 	@Inject
 	private BarrowsConfig config;
@@ -125,6 +156,8 @@ public class BarrowsPlugin extends Plugin
 		walls.clear();
 		ladders.clear();
 		puzzleAnswer = null;
+		wasInCrypt = false;
+		stopPrayerDrainTimer();
 
 		// Restore widgets
 		final Widget potential = client.getWidget(WidgetInfo.BARROWS_POTENTIAL);
@@ -137,6 +170,15 @@ public class BarrowsPlugin extends Plugin
 		if (barrowsBrothers != null)
 		{
 			barrowsBrothers.setHidden(false);
+		}
+	}
+
+	@Subscribe
+	public void onConfigChanged(ConfigChanged event)
+	{
+		if (event.getGroup().equals("barrows") && !config.showPrayerDrainTimer())
+		{
+			stopPrayerDrainTimer();
 		}
 	}
 
@@ -205,10 +247,23 @@ public class BarrowsPlugin extends Plugin
 	{
 		if (event.getGameState() == GameState.LOADING)
 		{
+			wasInCrypt = isInCrypt();
 			// on region changes the tiles get set to null
 			walls.clear();
 			puzzleAnswer = null;
 			ladders.clear();
+		}
+		else if (event.getGameState() == GameState.LOGGED_IN)
+		{
+			boolean isInCrypt = isInCrypt();
+			if (wasInCrypt && !isInCrypt)
+			{
+				stopPrayerDrainTimer();
+			}
+			else if (!wasInCrypt && isInCrypt)
+			{
+				startPrayerDrainTimer();
+			}
 		}
 	}
 	@Subscribe
@@ -230,5 +285,35 @@ public class BarrowsPlugin extends Plugin
 				}
 			}
 		}
+	}
+
+	private void startPrayerDrainTimer()
+	{
+		if (config.showPrayerDrainTimer())
+		{
+			final LoopTimer loopTimer = new LoopTimer(
+				PRAYER_DRAIN_INTERVAL_MS,
+				ChronoUnit.MILLIS,
+				spriteManager.getSprite(SpriteID.TAB_PRAYER, 0),
+				this,
+				true);
+
+			loopTimer.setPriority(InfoBoxPriority.MED);
+			loopTimer.setTooltip("Prayer Drain");
+
+			infoBoxManager.addInfoBox(loopTimer);
+			barrowsPrayerDrainTimer = loopTimer;
+		}
+	}
+
+	private void stopPrayerDrainTimer()
+	{
+		infoBoxManager.removeInfoBox(barrowsPrayerDrainTimer);
+		barrowsPrayerDrainTimer = null;
+	}
+
+	private boolean isInCrypt()
+	{
+		return client.getLocalPlayer().getWorldLocation().getRegionID() == CRYPT_REGION_ID;
 	}
 }

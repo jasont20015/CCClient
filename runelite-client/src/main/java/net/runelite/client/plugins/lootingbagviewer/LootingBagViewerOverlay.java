@@ -32,6 +32,7 @@ import net.runelite.api.ItemContainer;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayPosition;
+import net.runelite.client.ui.overlay.components.ComponentOrientation;
 import net.runelite.client.ui.overlay.components.ImageComponent;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 
@@ -62,7 +63,7 @@ class LootingBagViewerOverlay extends Overlay
 		setPosition(OverlayPosition.BOTTOM_RIGHT);
 		panelComponent.setWrapping(4);
 		panelComponent.setGap(new Point(6, 4));
-		panelComponent.setOrientation(PanelComponent.Orientation.HORIZONTAL);
+		panelComponent.setOrientation(ComponentOrientation.HORIZONTAL);
 		this.itemManager = itemManager;
 		this.client = client;
 
@@ -75,20 +76,26 @@ class LootingBagViewerOverlay extends Overlay
 		{
 			if(client.getItemContainer(InventoryID.LOOTING_BAG) != null) {
 				itemContainer = client.getItemContainer(InventoryID.LOOTING_BAG);
-				items = itemContainer.getItems();
+				if (itemContainer != null)
+				{
+					items = itemContainer.getItems();
+				}
 			}
 			return null;
 		}
-		else if(itemContainer != null && client.getItemContainer(InventoryID.LOOTING_BAG) != null)
+		else if(items != null && client.getItemContainer(InventoryID.LOOTING_BAG) != null)
 		{
 			itemContainer = client.getItemContainer(InventoryID.LOOTING_BAG);
-			Item[] tempItems = itemContainer.getItems();
-
-			for(int i = 0; i < items.length; i++)
+			if (itemContainer != null)
 			{
-				if(!items[i].equals(tempItems[i]))
+				Item[] tempItems = itemContainer.getItems();
+
+				for (int i = 0; i < items.length; i++)
 				{
-					items = tempItems;
+					if (!items[i].equals(tempItems[i]))
+					{
+						items = tempItems;
+					}
 				}
 			}
 		}

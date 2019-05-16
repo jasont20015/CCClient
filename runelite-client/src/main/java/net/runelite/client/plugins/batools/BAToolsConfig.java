@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2018, Cameron <https://github.com/noremac201>
- * Copyright (c) 2018, Jacob M <https://github.com/jacoblairm>
+ * Copyright (c) 2018, https://runelitepl.us
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -145,7 +144,7 @@ public interface BAToolsConfig extends Config
 	@ConfigItem(
 		keyName = "attackStyles",
 		name = "Attack Styles",
-		description = "asd"
+		description = "Hide attack styles depending on weapon."
 	)
 	default boolean attackStyles()
 	{
@@ -153,11 +152,31 @@ public interface BAToolsConfig extends Config
 	}
 
 	@ConfigItem(
-		keyName = "tagging",
-		name = "Attack Tags",
-		description = "asd"
+		keyName = "removeBA",
+		name = "*Barbarian Assault Helper*",
+		description = "Remove unnecessary menu options in Barbarian Assault depending on role<br>Examples: Remove attack options when not attacker<br>Remove take options when not collector"
 	)
-	default boolean tagging()
+	default boolean removeBA()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "removeWrongEggs",
+		name = "Remove wrong eggs - *Barbarian Assault Helper*",
+		description = "Remove unnecessary menu options in Barbarian Assault depending on role<br>Examples: Remove attack options when not attacker<br>Remove take options when not collector"
+	)
+	default boolean removeWrongEggs()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "removeWrongHealFood",
+		name = "Remove wrong Heal Food - *Barbarian Assault Helper*",
+		description = "Remove unnecessary menu options in Barbarian Assault depending on role<br>Examples: Remove attack options when not attacker<br>Remove take options when not collector"
+	)
+	default boolean removeHealWrongFood()
 	{
 		return false;
 	}
