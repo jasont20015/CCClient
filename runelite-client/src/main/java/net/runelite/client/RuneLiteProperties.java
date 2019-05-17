@@ -57,7 +57,7 @@ public class RuneLiteProperties
 		}
 		catch (IOException ex)
 		{
-			log.warn("unable to load propertries", ex);
+			log.warn("unable to load properties", ex);
 		}
 	}
 
