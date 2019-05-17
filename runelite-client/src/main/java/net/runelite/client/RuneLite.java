@@ -108,7 +108,7 @@ public class RuneLite
 	private SessionManager sessionManager;
 
 	@Inject
-	public DiscordService discordService;
+	private DiscordService discordService;
 
 	@Inject
 	private ClientSessionManager clientSessionManager;
@@ -308,6 +308,9 @@ public class RuneLite
 
 		// Close the splash screen
 		splashScreen.close();
+
+		// Initialize Discord service
+		discordService.init();
 
 		// Register event listeners
 		eventBus.register(clientUI);
