@@ -84,10 +84,10 @@ enum Emoji
 	CCCPEPEHANDS(":cccpepehands:"),
 	CCCWAITWHAT(":cccwaitwhat:"),
 	CCCOOL(":cccool:"),
-	MONKAN("monkan"),
+	MONKAN(":monkan:"),
 	CCC(":ccc:"),
-	TRICAT("tricat"),
-	TRICATCOOL(":tricatcool");
+	TRICAT(":tricat:"),
+	TRICATCOOL(":tricatcool:");
 
 	private static final Map<String, Emoji> emojiMap;
 
