@@ -319,7 +319,7 @@ public class CoxPlugin extends Plugin
 				guardTick = -1;
 				runGuard = true;
 				break;
-			case NpcID.GREAT_OLM_RIGHT_CLAW_7553:
+			case NpcID.GREAT_OLM_LEFT_CLAW_7555:
 			case NpcID.GREAT_OLM_LEFT_CLAW:
 				hand = npc;
 				break;
@@ -367,7 +367,7 @@ public class CoxPlugin extends Plugin
 				runGuard = false;
 				Guard2_NPC = null;
 				break;
-			case NpcID.GREAT_OLM_RIGHT_CLAW_7553:
+			case NpcID.GREAT_OLM_LEFT_CLAW_7555:
 			case NpcID.GREAT_OLM_LEFT_CLAW:
 				HandCripple = false;
 				break;
