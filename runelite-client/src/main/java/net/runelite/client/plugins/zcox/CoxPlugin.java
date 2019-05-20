@@ -369,6 +369,8 @@ public class CoxPlugin extends Plugin
 				break;
 			case NpcID.GREAT_OLM_LEFT_CLAW_7555:
 			case NpcID.GREAT_OLM_LEFT_CLAW:
+			case NpcID.GREAT_OLM_RIGHT_CLAW_7553:
+			case NpcID.GREAT_OLM_RIGHT_CLAW:
 				HandCripple = false;
 				break;
 		}
